@@ -376,12 +376,12 @@ async function main() {
 
   console.log('Creating Tower Head...');
   const towerHead = await prisma.user.upsert({
-    where: { email: 'th.manager@skilltrack.com' },
+    where: { email: 'th.manager@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00001',
       name: 'Arthur Pendragon',
-      email: 'th.manager@skilltrack.com',
+      email: 'th.manager@lumora.com',
       githubUsername: 'stephan-cd',
       passwordHash: commonPasswordHash,
       designation: 'Tower Head - Digital Engineering',
@@ -393,12 +393,12 @@ async function main() {
 
   console.log('Creating Reporting Manager...');
   const reportingManager = await prisma.user.upsert({
-    where: { email: 'rm.lead@skilltrack.com' },
+    where: { email: 'rm.lead@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00002',
       name: 'Guinevere Pendragon',
-      email: 'rm.lead@skilltrack.com',
+      email: 'rm.lead@lumora.com',
       githubUsername: 'guinevere-lead',
       passwordHash: commonPasswordHash,
       designation: 'Engineering Manager',
@@ -411,12 +411,12 @@ async function main() {
 
   console.log('Creating Team Member...');
   const teamMember = await prisma.user.upsert({
-    where: { email: 'tm.dev@skilltrack.com' },
+    where: { email: 'tm.dev@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00003',
       name: 'Lancelot du Lac',
-      email: 'tm.dev@skilltrack.com',
+      email: 'tm.dev@lumora.com',
       githubUsername: 'lancelot-code',
       passwordHash: commonPasswordHash,
       designation: 'Senior Frontend Developer',
@@ -429,12 +429,12 @@ async function main() {
 
   console.log('Creating additional team member...');
   const teamMember2 = await prisma.user.upsert({
-    where: { email: 'galahad.dev@skilltrack.com' },
+    where: { email: 'galahad.dev@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00004',
       name: 'Galahad Knight',
-      email: 'galahad.dev@skilltrack.com',
+      email: 'galahad.dev@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Backend Developer',
       department: 'Engineering',
@@ -446,12 +446,12 @@ async function main() {
 
   console.log('Creating inactive user...');
   await prisma.user.upsert({
-    where: { email: 'mordred.dev@skilltrack.com' },
+    where: { email: 'mordred.dev@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00005',
       name: 'Mordred Pendragon',
-      email: 'mordred.dev@skilltrack.com',
+      email: 'mordred.dev@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Junior Developer',
       department: 'Engineering',
@@ -463,12 +463,12 @@ async function main() {
 
   console.log('Creating Training Department...');
   await prisma.user.upsert({
-    where: { email: 'training@skilltrack.com' },
+    where: { email: 'training@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-99999',
       name: 'Merlin the Enchanter',
-      email: 'training@skilltrack.com',
+      email: 'training@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Training Manager',
       department: 'Training',
@@ -479,12 +479,12 @@ async function main() {
 
   console.log('Creating Product Tower Head...');
   const productTowerHead = await prisma.user.upsert({
-    where: { email: 'product.th@skilltrack.com' },
+    where: { email: 'product.th@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00011',
       name: 'Morgana le Fay',
-      email: 'product.th@skilltrack.com',
+      email: 'product.th@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Tower Head - Product Management',
       department: 'Product',
@@ -495,12 +495,12 @@ async function main() {
 
   console.log('Creating Product Manager...');
   const productManager = await prisma.user.upsert({
-    where: { email: 'product.rm@skilltrack.com' },
+    where: { email: 'product.rm@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00012',
       name: 'Kay Seneschal',
-      email: 'product.rm@skilltrack.com',
+      email: 'product.rm@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Product Manager',
       department: 'Product',
@@ -512,12 +512,12 @@ async function main() {
 
   console.log('Creating Product Team Member...');
   const productMember = await prisma.user.upsert({
-    where: { email: 'product.tm@skilltrack.com' },
+    where: { email: 'product.tm@lumora.com' },
     update: {},
     create: {
       employeeId: 'ST-00013',
       name: 'Bedivere Knight',
-      email: 'product.tm@skilltrack.com',
+      email: 'product.tm@lumora.com',
       passwordHash: commonPasswordHash,
       designation: 'Associate Product Manager',
       department: 'Product',
@@ -844,9 +844,9 @@ async function main() {
   await prisma.auditLog.createMany({
     data: [
       { userId: towerHead.id, action: 'USER_LOGIN', details: 'Tower Head logged in from web interface', ipAddress: '127.0.0.1' },
-      { userId: towerHead.id, action: 'USER_CREATE', details: 'Created Reporting Manager: rm.lead@skilltrack.com', ipAddress: '127.0.0.1' },
+      { userId: towerHead.id, action: 'USER_CREATE', details: 'Created Reporting Manager: rm.lead@lumora.com', ipAddress: '127.0.0.1' },
       { userId: reportingManager.id, action: 'USER_LOGIN', details: 'Reporting Manager logged in', ipAddress: '127.0.0.1' },
-      { userId: reportingManager.id, action: 'USER_CREATE', details: 'Created Team Member: tm.dev@skilltrack.com', ipAddress: '127.0.0.1' },
+      { userId: reportingManager.id, action: 'USER_CREATE', details: 'Created Team Member: tm.dev@lumora.com', ipAddress: '127.0.0.1' },
       { userId: teamMember.id, action: 'LEARNING_ENTRY_SUBMIT', details: 'Logged 3.5 hours for Next.js', ipAddress: '127.0.0.1' }
     ]
   });

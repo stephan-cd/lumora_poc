@@ -1,12 +1,12 @@
-# SkillTrack - Enterprise Skill and Learning Tracker
+# Lumora - Enterprise Skill and Learning Tracker
 
-SkillTrack is a production-ready enterprise Skill and Learning Hours Tracking platform. It enables organizations to track employee upskilling, log learning activities, verify skills competencies, and analyze capability gaps using a modular monolithic architecture.
+Lumora is a production-ready enterprise Skill and Learning Hours Tracking platform. It enables organizations to track employee upskilling, log learning activities, verify skills competencies, and analyze capability gaps using a modular monolithic architecture.
 
 ---
 
 ## 🏗️ Architecture & Folder Structure
 
-SkillTrack is built on top of **Next.js 15 (App Router)** and **React 19**, using **Material UI v9**, **TanStack Query**, **React Hook Form**, and **Zod**. The backend utilizes **Prisma ORM** connecting to **PostgreSQL**, with security handled via **NextAuth Credentials & RBAC Middleware**.
+Lumora is built on top of **Next.js 15 (App Router)** and **React 19**, using **Material UI v9**, **TanStack Query**, **React Hook Form**, and **Zod**. The backend utilizes **Prisma ORM** connecting to **PostgreSQL**, with security handled via **NextAuth Credentials & RBAC Middleware**.
 
 The project conforms to a clean, decoupled modular monolith pattern:
 
@@ -43,7 +43,7 @@ src/
 ### 2. Environment Setup
 Copy or edit the `.env` file in the root directory:
 ```env
-DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/skilltrack?schema=public"
+DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/lumora?schema=public"
 NEXTAUTH_SECRET="enterpriseproductionreadysecretkey12345"
 NEXTAUTH_URL="http://localhost:3000"
 ```
@@ -76,11 +76,11 @@ Open [http://localhost:3000](http://localhost:3000) to access the app.
 
 The seeding script populates standard accounts (password for all is `password123`):
 
-1. **Tower Head**: `th.manager@skilltrack.com`
+1. **Tower Head**: `th.manager@lumora.com`
    * Can create Reporting Managers, manage global skills, trigger Udemy configurations, and run organization-wide gap analysis.
-2. **Reporting Manager**: `rm.lead@skilltrack.com`
+2. **Reporting Manager**: `rm.lead@lumora.com`
    * Can create Team Members, assess skill proficiencies, approve logs, and track team matrices.
-3. **Team Member**: `tm.dev@skilltrack.com`
+3. **Team Member**: `tm.dev@lumora.com`
    * Can log learning hours, submit custom skill requests, and configure individual learning goals.
 
 ---

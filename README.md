@@ -1,23 +1,20 @@
 # AI Code Review Platform (V1)
 
-An event-driven, full-stack AI Code Review Platform. It listens to GitHub Webhooks, generates code embeddings to retrieve custom coding rules from a Qdrant Vector Database, and uses a local Llama 3.1 LLM to generate strict JSON code reviews.
+An event-driven, full-stack AI Code Review Platform. It listens to GitHub Webhooks, generates code embeddings to retrieve custom coding rules from a Qdrant Vector Database, and uses Groq's fast inference API with Llama 3.3 70B to generate strict JSON code reviews.
 
 ## 🛠️ Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 - **Go** (v1.21+) - For the backend API
-- **Node.js** (v18+) & **npm** - For the React frontend
+- **Node.js** (v18+) & **npm** - For the Next.js frontend
 - **Docker** & **Docker Compose** - For PostgreSQL and Qdrant
-- **Ollama** - For running the local AI models
+- **Ollama** - For running the local embedding model
 - **ngrok** (Optional) - For exposing your local server to real GitHub webhooks
 
 ## 📥 1. Setup Local AI Models
 Open your terminal and pull the required models via Ollama. 
 *(Ensure the Ollama desktop app is running in the background before executing these).*
 ```bash
-# Pull the main LLM used for code review
-ollama pull llama3.1
-
 # Pull the embedding model used for Qdrant Vector Search
 ollama pull nomic-embed-text
 ```
@@ -31,7 +28,7 @@ Run the following Docker commands in your terminal:
 docker run -d -p 6333:6333 -p 6334:6334 --name qdrant qdrant/qdrant
 
 # Start PostgreSQL DB
-docker run -d -p 5432:5432 -e POSTGRES_USER=lumora -e POSTGRES_PASSWORD=lumorapassword -e POSTGRES_DB=lumora_db --name postgres postgres
+docker run -d -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgrespassword -e POSTGRES_DB=lumora --name postgres postgres
 ```
 
 ## ⚙️ 3. Backend Setup
@@ -43,7 +40,8 @@ docker run -d -p 5432:5432 -e POSTGRES_USER=lumora -e POSTGRES_PASSWORD=lumorapa
    ```env
    # backend/.env
    GITHUB_ACCESS_TOKEN=your_github_personal_access_token
-   DATABASE_URL=host=localhost user=lumora password=lumorapassword dbname=lumora_db port=5432 sslmode=disable
+   DATABASE_URL=host=localhost user=postgres password=postgrespassword dbname=lumora port=5432 sslmode=disable
+   GROQ_API_KEY=your_groq_api_key
    ```
 3. Install Go dependencies and run the server:
    ```bash
@@ -57,12 +55,21 @@ docker run -d -p 5432:5432 -e POSTGRES_USER=lumora -e POSTGRES_PASSWORD=lumorapa
    ```bash
    cd frontend
    ```
-2. Install the React dependencies and start the development server:
+2. Create a `.env` file in the `frontend` folder:
+   ```env
+   DATABASE_URL="postgresql://postgres:postgrespassword@localhost:5432/lumora?schema=public"
+   NEXTAUTH_SECRET="your_nextauth_secret"
+   NEXTAUTH_URL="http://localhost:3000"
+   GROQ_API_KEY="your_groq_api_key"
+   ```
+3. Install the Next.js dependencies, setup Prisma, and start the development server:
    ```bash
    npm install
+   npx prisma generate
+   npx prisma db push
    npm run dev
    ```
-   *The React dashboard will be accessible at `http://localhost:5173`.*
+   *The Next.js dashboard will be accessible at `http://localhost:3000`.*
 
 ## 🚀 5. How to Test the Platform
 
@@ -94,4 +101,4 @@ curl -X POST http://localhost:8080/api/v1/webhooks/github \
 ```
 
 ### Step 3: View the Results
-Open your React Frontend (`http://localhost:5173`). Once the background Go worker finishes parsing the diff and generating the LLM review, you will see the new AI review populated on the dashboard. Click **View Details** to see the side-by-side Git Diff with the AI suggestions overlay!
+Open your Next.js Frontend (`http://localhost:3000`). Once the background Go worker finishes parsing the diff and generating the LLM review, you will see the new AI review populated on the dashboard. Click **View Details** to see the side-by-side Git Diff with the AI suggestions overlay!

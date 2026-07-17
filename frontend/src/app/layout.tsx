@@ -18,7 +18,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'SkillTrack - Enterprise Skill & Learning Tracker',
+  title: 'Lumora - Enterprise Skill & Learning Tracker',
   description: 'Enterprise skill repository, upskilling matrix, learning hours log, and manager approval dashboard for tracking organizational capabilities.',
 };
 

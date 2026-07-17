@@ -168,7 +168,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             letterSpacing: '-0.03em'
           }}
         >
-          SkillTrack
+          Lumora
         </Typography>
       </Toolbar>
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />

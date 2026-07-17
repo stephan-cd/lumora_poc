@@ -114,7 +114,7 @@ export default function LoginPage() {
             <LockOutlinedIcon />
           </Box>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, fontFamily: 'var(--font-outfit)' }}>
-            SkillTrack Login
+            Lumora Login
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Sign in to track skills and learning hours
@@ -141,7 +141,7 @@ export default function LoginPage() {
               error={!!errors.email}
               helperText={errors.email?.message}
               slotProps={{ inputLabel: { shrink: true } }}
-              placeholder="e.g. employee@skilltrack.com"
+              placeholder="e.g. employee@lumora.com"
             />
             <TextField
               {...register('password')}
@@ -202,7 +202,7 @@ export default function LoginPage() {
                   onChange={(e) => setForgotEmail(e.target.value)}
                   required
                   slotProps={{ inputLabel: { shrink: true } }}
-                  placeholder="e.g. user@skilltrack.com"
+                  placeholder="e.g. user@lumora.com"
                 />
               </>
             )}

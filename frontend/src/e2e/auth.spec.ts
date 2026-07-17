@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('SkillTrack Authentication E2E tests', () => {
+test.describe('Lumora Authentication E2E tests', () => {
   test('should redirect unauthenticated root users to the login page', async ({ page }) => {
     // Navigate to root
     await page.goto('/');
@@ -13,7 +13,7 @@ test.describe('SkillTrack Authentication E2E tests', () => {
     await page.goto('/auth/login');
     
     // Verify title and description
-    await expect(page.locator('h5')).toContainText('SkillTrack Login');
+    await expect(page.locator('h5')).toContainText('Lumora Login');
     await expect(page.getByText('Sign in to track skills and learning hours')).toBeVisible();
 
     // Verify form fields

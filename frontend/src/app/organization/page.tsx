@@ -364,7 +364,7 @@ export default function OrganizationPage() {
                 margin="normal"
                 required
                 slotProps={{ inputLabel: { shrink: true } }}
-                placeholder="e.g. jdoe@skilltrack.com"
+                placeholder="e.g. jdoe@lumora.com"
               />
             )}
 

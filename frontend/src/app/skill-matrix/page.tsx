@@ -148,7 +148,7 @@ export default function SkillMatrixPage() {
 
     const doc = new jsPDF('l', 'mm', 'a4');
 
-    doc.text('SkillTrack - Employee Skill Competency Matrix', 14, 15);
+    doc.text('Lumora - Employee Skill Competency Matrix', 14, 15);
 
     const headers = ['Employee Name', 'ID', 'Department', ...skillsToDisplay.map((s: any) => s.name)];
     const body = employees.map((emp: any) => [

@@ -39,7 +39,7 @@ describe('UserService Unit Tests', () => {
   it('should throw an error if the current password is incorrect during change password', async () => {
     const mockUser = {
       id: 'user-id',
-      email: 'dev@skilltrack.com',
+      email: 'dev@lumora.com',
       passwordHash: 'hashed-old-password',
     };
     (prisma.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
@@ -62,7 +62,7 @@ describe('LearningService Unit Tests', () => {
     const mockUser = {
       id: 'dev-user-id',
       name: 'Developer Test',
-      email: 'dev.test@skilltrack.com',
+      email: 'dev.test@lumora.com',
       role: 'TEAM_MEMBER',
       managerId: 'manager-id',
     };

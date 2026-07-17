@@ -110,7 +110,7 @@ export default function ReportsPage() {
       } else if (format === 'pdf') {
         const doc = new jsPDF('l', 'mm', 'a4');
         doc.setFontSize(14);
-        doc.text(`SkillTrack Report: ${reportTitle}`, 14, 15);
+        doc.text(`Lumora Report: ${reportTitle}`, 14, 15);
         doc.setFontSize(9);
         doc.text(`Generated on: ${new Date().toLocaleDateString()} | Filters: ${employeeId ? 'Selected Member' : 'All'} | ${skillId ? 'Selected Skill' : 'All'}`, 14, 20);
 
@@ -151,7 +151,7 @@ export default function ReportsPage() {
     <Layout>
       <Card sx={{ maxWidth: 800, mx: 'auto', p: 4 }}>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <ReportIcon color="primary" fontSize="large" /> SkillTrack Reports Engine
+          <ReportIcon color="primary" fontSize="large" /> Lumora Reports Engine
         </Typography>
         <Divider sx={{ mb: 4 }} />
 

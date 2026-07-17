@@ -3,12 +3,12 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: skilltrack-db
+    container_name: lumora-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: skilltrack
+      POSTGRES_DB: lumora
     ports:
       - "5432:5432"
     volumes:
@@ -18,12 +18,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: skilltrack-app
+    container_name: lumora-app
     restart: always
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgrespassword@postgres:5432/skilltrack?schema=public
+      - DATABASE_URL=postgresql://postgres:postgrespassword@postgres:5432/lumora?schema=public
       - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=enterpriseproductionreadysecretkey12345
     depends_on:
