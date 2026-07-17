@@ -1,0 +1,362 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  TOWER_HEAD
+  REPORTING_MANAGER
+  TEAM_MEMBER
+  TRAINING_DEPT
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LearningType {
+  COURSE
+  CERTIFICATION
+  WORKSHOP
+  INTERNAL_TRAINING
+  YOUTUBE
+  BOOK_READING
+  RESEARCH
+  CONFERENCE
+  SELF_LEARNING
+  OTHER
+}
+
+enum LearningSource {
+  MANUAL
+  INTERNAL_LMS
+  UDEMY
+  COURSERA
+  OTHER
+}
+
+enum ProficiencyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum GoalType {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum UdemySyncStatus {
+  SUCCESS
+  FAILED
+  RUNNING
+}
+
+model User {
+  id               String       @id @default(uuid())
+  employeeId       String       @unique
+  name             String
+  email            String       @unique
+  githubUsername   String?      @unique
+  passwordHash     String
+  designation      String
+  department       String
+  role             Role         @default(TEAM_MEMBER)
+  status           UserStatus   @default(ACTIVE)
+  managerId        String?
+  manager          User?        @relation("ReportingHierarchy", fields: [managerId], references: [id])
+  subordinates     User[]       @relation("ReportingHierarchy")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  learningEntries  LearningEntry[] @relation("UserLearning")
+  approvedEntries  LearningEntry[] @relation("ApproverLearning")
+  skillRequests    SkillRequest[]  @relation("UserRequests")
+  approvedRequests SkillRequest[]  @relation("ApproverRequests")
+  proficiencies    SkillProficiency[]
+  goals            LearningGoal[]
+  notifications    Notification[]
+  auditLogs        AuditLog[]
+  udemyProgress    UdemyProgress[]
+  udemyCertifications UdemyCertification[]
+  commits             Commit[]
+  profileReport       UserProfileReport?
+
+  @@index([managerId])
+  @@index([role])
+}
+
+model Skill {
+  id               String       @id @default(uuid())
+  name             String       @unique
+  category         String
+  description      String?
+  isCustom         Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  learningEntries  LearningEntry[]
+  proficiencies    SkillProficiency[]
+  requests         SkillRequest[]
+  udemyCourses     UdemyCourse[]
+
+  @@index([category])
+}
+
+model SkillRequest {
+  id               String         @id @default(uuid())
+  skillName        String
+  category         String
+  description      String?
+  status           ApprovalStatus @default(PENDING)
+  requestedById    String
+  requestedBy      User           @relation("UserRequests", fields: [requestedById], references: [id])
+  approvedById     String?
+  approvedBy       User?          @relation("ApproverRequests", fields: [approvedById], references: [id])
+  comments         String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  skillId          String?
+  skill            Skill?         @relation(fields: [skillId], references: [id])
+
+  @@index([requestedById])
+  @@index([status])
+}
+
+model LearningEntry {
+  id               String         @id @default(uuid())
+  userId           String
+  user             User           @relation("UserLearning", fields: [userId], references: [id], onDelete: Cascade)
+  skillId          String
+  skill            Skill          @relation(fields: [skillId], references: [id])
+  date             DateTime
+  hoursSpent       Float
+  learningType     LearningType
+  learningSource   LearningSource @default(MANUAL)
+  description      String
+  attachmentPath   String?
+  status           ApprovalStatus @default(PENDING)
+  approverId       String?
+  approver         User?          @relation("ApproverLearning", fields: [approverId], references: [id])
+  approvalDate     DateTime?
+  comments         String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([skillId])
+  @@index([status])
+  @@index([date])
+}
+
+model SkillProficiency {
+  id               String           @id @default(uuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillId          String
+  skill            Skill            @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  level            ProficiencyLevel @default(BEGINNER)
+  assessedById     String?
+  assessedAt       DateTime         @default(now())
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@unique([userId, skillId])
+  @@index([userId])
+  @@index([skillId])
+}
+
+model LearningGoal {
+  id               String       @id @default(uuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             GoalType
+  targetHours      Float
+  startDate        DateTime
+  endDate          DateTime
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([userId])
+}
+
+model Notification {
+  id               String       @id @default(uuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message          String
+  isRead           Boolean      @default(false)
+  createdAt        DateTime     @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model AuditLog {
+  id               String       @id @default(uuid())
+  userId           String?
+  user             User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action           String
+  details          String
+  ipAddress        String?
+  createdAt        DateTime     @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
+
+model UdemyConfig {
+  id               String          @id @default(uuid())
+  clientId         String
+  clientSecret     String
+  orgId            String
+  syncFrequency    String          @default("daily") // daily, weekly, custom
+  syncSchedule     String?         // cron pattern
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+}
+
+model UdemyCourse {
+  id               String          @id @default(uuid())
+  courseId         Int             @unique // External course ID
+  title            String
+  instructor       String
+  duration         Float           // in hours
+  category         String
+  rating           Float           @default(0.0)
+  language         String          @default("English")
+  url              String?
+  createdAt        DateTime        @default(now())
+  skillId          String?
+  skill            Skill?          @relation(fields: [skillId], references: [id])
+
+  progress         UdemyProgress[]
+  certifications   UdemyCertification[]
+}
+
+model UdemyProgress {
+  id               String          @id @default(uuid())
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId         String
+  course           UdemyCourse     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progressPercent  Float           @default(0.0)
+  timeSpent        Float           @default(0.0) // in hours
+  lastAccessDate   DateTime?
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model UdemyCertification {
+  id               String          @id @default(uuid())
+  certificateName  String
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId         String
+  course           UdemyCourse     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  completionDate   DateTime
+
+  @@unique([userId, courseId])
+}
+
+model UdemySyncLog {
+  id               String          @id @default(uuid())
+  syncTime         DateTime        @default(now())
+  status           UdemySyncStatus
+  recordsImported  Int             @default(0)
+  errorLogs        String?
+}
+
+model Repository {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  url           String
+  provider      String
+  default_branch String  @default("main")
+  ai_enabled    Boolean  @default(true)
+  created_at    DateTime
+  updated_at    DateTime
+  deleted_at    DateTime?
+
+  commits       Commit[]
+
+  @@map("repositories")
+}
+
+model Commit {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  repository_id String     @db.Uuid
+  repository    Repository @relation(fields: [repository_id], references: [id])
+  commit_hash   String
+  branch        String
+  author        String
+  message       String?
+  created_at    DateTime
+  user_id       String?    // Link to User table
+  user          User?      @relation(fields: [user_id], references: [id])
+
+  reviews       Review[]
+
+  @@map("commits")
+  @@index([commit_hash])
+}
+
+model Review {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commit_id  String   @db.Uuid
+  commit     Commit   @relation(fields: [commit_id], references: [id])
+  status     String   @default("pending")
+  score      Int      @default(0)
+  diff       String?
+  created_at DateTime
+  updated_at DateTime
+
+  issues     ReviewIssue[]
+
+  @@map("reviews")
+}
+
+model ReviewIssue {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  review_id      String   @db.Uuid
+  review         Review   @relation(fields: [review_id], references: [id])
+  file_path      String
+  line_number    Int?
+  severity       String
+  rule_violated  String?
+  explanation    String?
+  recommendation String?
+  suggested_fix  String?
+  resolved       Boolean  @default(false)
+  created_at     DateTime
+
+  @@map("review_issues")
+  @@index([review_id])
+}
+
+model UserProfileReport {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learningReport   String?  @db.Text
+  codeReviewReport String?  @db.Text
+  reportData       String?  @db.Text
+  generatedAt      DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("user_profile_reports")
+}

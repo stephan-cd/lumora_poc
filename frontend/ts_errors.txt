@@ -1,0 +1,109 @@
+src/app/analytics/page.tsx(213,22): error TS2304: Cannot find name 'Divider'.
+src/app/analytics/page.tsx(225,29): error TS2322: Type '{ primary: any; secondary: string; primaryTypographyProps: { fontWeight: number; fontSize: string; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/analytics/page.tsx(242,22): error TS2304: Cannot find name 'Divider'.
+src/app/analytics/page.tsx(254,29): error TS2322: Type '{ primary: any; secondary: any; primaryTypographyProps: { fontWeight: number; fontSize: string; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/analytics/page.tsx(271,22): error TS2304: Cannot find name 'Divider'.
+src/app/analytics/page.tsx(282,29): error TS2322: Type '{ primary: any; primaryTypographyProps: { fontWeight: number; fontSize: string; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/analytics/page.tsx(318,81): error TS2322: Type '{ primary: any; secondary: any; primaryTypographyProps: { fontWeight: number; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/analytics/page.tsx(338,81): error TS2322: Type '{ primary: any; secondary: any; primaryTypographyProps: { fontWeight: number; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/analytics/page.tsx(358,81): error TS2322: Type '{ primary: any; secondary: any; primaryTypographyProps: { fontWeight: number; }; }' is not assignable to type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+  Property 'primaryTypographyProps' does not exist on type 'IntrinsicAttributes & ListItemTextProps<"span", "p">'.
+src/app/auth/login/page.tsx(184,70): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/dashboard/page.tsx(38,3): error TS2724: '"@mui/icons-material"' has no exported member named 'ErrorOutline'. Did you mean 'ErrorOutlined'?
+src/app/dashboard/page.tsx(471,31): error TS2304: Cannot find name 'user'.
+src/app/dashboard/page.tsx(480,31): error TS2304: Cannot find name 'user'.
+src/app/dashboard/page.tsx(490,31): error TS2304: Cannot find name 'user'.
+src/app/dashboard/page.tsx(499,31): error TS2304: Cannot find name 'user'.
+src/app/dashboard/page.tsx(559,66): error TS2322: Type '{ children: (false | Element)[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/learning/approvals/page.tsx(174,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<...>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: (false | Element)[]; container: true; spacing: number; alignItems: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<GridTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: (false | Element)[]; container: true; spacing: number; alignItems: string; }' is not assignable to type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+src/app/learning/approvals/page.tsx(360,69): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/learning/approvals/page.tsx(410,78): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/learning/history/page.tsx(130,52): error TS2345: Argument of type '{ skillId: string; date: string; hoursSpent: number; learningType: string; learningSource: string; description: string; attachmentPath?: string | undefined; }' is not assignable to parameter of type '{ skillId?: string | undefined; date?: string | undefined; hoursSpent?: number | undefined; learningType?: LearningType | undefined; learningSource?: LearningSource | undefined; description?: string | undefined; attachmentPath?: string | undefined; }'.
+  Types of property 'learningType' are incompatible.
+    Type 'string' is not assignable to type 'LearningType | undefined'.
+src/app/learning/history/page.tsx(133,39): error TS2345: Argument of type '{ skillId: string; date: string; hoursSpent: number; learningType: string; learningSource: string; description: string; attachmentPath?: string | undefined; }' is not assignable to parameter of type '{ skillId: string; date: string; hoursSpent: number; learningType: LearningType; learningSource: LearningSource; description: string; attachmentPath?: string | undefined; }'.
+  Types of property 'learningType' are incompatible.
+    Type 'string' is not assignable to type 'LearningType'.
+src/app/learning/history/page.tsx(275,18): error TS2304: Cannot find name 'Divider'.
+src/app/learning/history/page.tsx(305,18): error TS2304: Cannot find name 'Divider'.
+src/app/learning/history/page.tsx(328,64): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/learning/history/page.tsx(450,66): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/organization/page.tsx(326,78): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/skill-matrix/page.tsx(199,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<...>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element[]; container: true; spacing: number; alignItems: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<GridTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element[]; container: true; spacing: number; alignItems: string; }' is not assignable to type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+src/app/skill-matrix/page.tsx(302,36): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & TypographyOwnProps & CommonProps & Omit<any, "children" | ... 9 more ... | "variantMapping">): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: any[]; variant: "caption"; display: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<TypographyTypeMap<{}, "span">>): Element | null', gave the following error.
+    Type '{ children: any[]; variant: "caption"; display: string; }' is not assignable to type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+      Property 'display' does not exist on type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+src/app/skill-matrix/page.tsx(303,36): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & TypographyOwnProps & CommonProps & Omit<any, "children" | ... 9 more ... | "variantMapping">): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: any[]; variant: "caption"; display: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<TypographyTypeMap<{}, "span">>): Element | null', gave the following error.
+    Type '{ children: any[]; variant: "caption"; display: string; }' is not assignable to type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+      Property 'display' does not exist on type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+src/app/skill-matrix/page.tsx(304,36): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & TypographyOwnProps & CommonProps & Omit<any, "children" | ... 9 more ... | "variantMapping">): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: string[]; variant: "caption"; display: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<TypographyTypeMap<{}, "span">>): Element | null', gave the following error.
+    Type '{ children: string[]; variant: "caption"; display: string; }' is not assignable to type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+      Property 'display' does not exist on type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+src/app/skills/page.tsx(198,14): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<...>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element[]; container: true; spacing: number; sx: { mb: number; }; alignItems: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<GridTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element[]; container: true; spacing: number; sx: { mb: number; }; alignItems: string; }' is not assignable to type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+src/app/skills/page.tsx(297,34): error TS2304: Cannot find name 'Tooltip'.
+src/app/skills/page.tsx(305,35): error TS2304: Cannot find name 'Tooltip'.
+src/app/skills/page.tsx(373,72): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/skills/page.tsx(419,78): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/skills/page.tsx(465,74): error TS2322: Type '{ children: Element[]; open: boolean; onClose: () => void; PaperProps: { sx: { borderRadius: number; width: number; }; }; }' is not assignable to type 'IntrinsicAttributes & DialogProps'.
+  Property 'PaperProps' does not exist on type 'IntrinsicAttributes & DialogProps'.
+src/app/udemy/certifications/page.tsx(97,24): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & SvgIconOwnProps & CommonProps & Omit<any, "children" | ... 10 more ... | "viewBox">): Element | null', gave the following error.
+    Property 'component' is missing in type '{ color: "warning"; size: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<SvgIconTypeMap<{}, "svg">>): Element | null', gave the following error.
+    Type '{ color: "warning"; size: string; }' is not assignable to type 'IntrinsicAttributes & SvgIconOwnProps & CommonProps & Omit<SVGProps<SVGSVGElement>, "children" | ... 10 more ... | "viewBox">'.
+      Property 'size' does not exist on type 'IntrinsicAttributes & SvgIconOwnProps & CommonProps & Omit<SVGProps<SVGSVGElement>, "children" | ... 10 more ... | "viewBox">'.
+src/app/udemy/courses/page.tsx(49,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<...>): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: Element; container: true; spacing: number; alignItems: string; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<GridTypeMap<{}, "div">>): Element | null', gave the following error.
+    Type '{ children: Element; container: true; spacing: number; alignItems: string; }' is not assignable to type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+      Property 'alignItems' does not exist on type 'IntrinsicAttributes & GridBaseProps & { sx?: SxProps<Theme> | undefined; } & Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "sx" | keyof GridBaseProps>'.
+src/app/udemy/courses/page.tsx(101,26): error TS2304: Cannot find name 'Chip'.
+src/app/udemy/settings/page.tsx(58,35): error TS2339: Property 'clientId' does not exist on type '{}'.
+src/app/udemy/settings/page.tsx(59,39): error TS2339: Property 'clientSecret' does not exist on type '{}'.
+src/app/udemy/settings/page.tsx(60,32): error TS2339: Property 'orgId' does not exist on type '{}'.
+src/app/udemy/settings/page.tsx(61,40): error TS2339: Property 'syncFrequency' does not exist on type '{}'.
+src/components/Layout.tsx(388,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: { component: ElementType<any, keyof IntrinsicElements>; } & TypographyOwnProps & CommonProps & Omit<any, "children" | ... 9 more ... | "variantMapping">): Element | null', gave the following error.
+    Property 'component' is missing in type '{ children: string; variant: "caption"; noWrap: true; display: string; sx: { color: "text.secondary"; overflow: "hidden"; textOverflow: "ellipsis"; }; }' but required in type '{ component: ElementType<any, keyof IntrinsicElements>; }'.
+  Overload 2 of 2, '(props: DefaultComponentProps<TypographyTypeMap<{}, "span">>): Element | null', gave the following error.
+    Type '{ children: string; variant: "caption"; noWrap: true; display: string; sx: { color: "text.secondary"; overflow: "hidden"; textOverflow: "ellipsis"; }; }' is not assignable to type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
+      Property 'display' does not exist on type 'IntrinsicAttributes & TypographyOwnProps & CommonProps & Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "children" | ... 9 more ... | "variantMapping">'.
