@@ -239,7 +239,7 @@ export default function SkillsPage() {
               <Box sx={{ display: 'flex', py: 8, justifyContent: 'center' }}>
                 <CircularProgress />
               </Box>
-            ) : !skills || skills.length === 0 ? (
+            ) : !Array.isArray(skills) || skills.length === 0 ? (
               <EmptyState message="No skills found. Try modifying filters or request a new custom skill." />
             ) : (
               <Grid container spacing={2}>
@@ -287,7 +287,7 @@ export default function SkillsPage() {
                         <TableRow>
                           <TableCell colSpan={6} align="center"><CircularProgress size={24} /></TableCell>
                         </TableRow>
-                      ) : !pendingRequests || pendingRequests.length === 0 ? (
+                      ) : !Array.isArray(pendingRequests) || pendingRequests.length === 0 ? (
                         <TableRow>
                           <TableCell colSpan={6} align="center">No pending skill requests.</TableCell>
                         </TableRow>
@@ -343,7 +343,7 @@ export default function SkillsPage() {
                       <TableRow>
                         <TableCell colSpan={6} align="center"><CircularProgress size={24} /></TableCell>
                       </TableRow>
-                    ) : !requestsHistory || requestsHistory.length === 0 ? (
+                    ) : !Array.isArray(requestsHistory) || requestsHistory.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={6} align="center">No request history found.</TableCell>
                       </TableRow>

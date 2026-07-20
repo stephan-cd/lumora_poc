@@ -201,7 +201,7 @@ export default function SkillMatrixPage() {
                 slotProps={{ select: { displayEmpty: true } }}
               >
                 <MenuItem value="">All Teams</MenuItem>
-                {managers && managers.map((m: any) => (
+                {Array.isArray(managers) && managers.map((m: any) => (
                   <MenuItem key={m.id} value={m.id}>{m.name}</MenuItem>
                 ))}
               </TextField>
@@ -221,7 +221,7 @@ export default function SkillMatrixPage() {
                     return `${selected.length} skills selected`;
                   }}
                 >
-                  {allSkills && allSkills.map((s: any) => (
+                  {Array.isArray(allSkills) && allSkills.map((s: any) => (
                     <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
                   ))}
                 </Select>

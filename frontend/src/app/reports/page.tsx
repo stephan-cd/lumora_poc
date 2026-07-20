@@ -187,7 +187,7 @@ export default function ReportsPage() {
               slotProps={{ select: { displayEmpty: true } }}
             >
               <MenuItem value="">All Employees</MenuItem>
-              {users && users.map((u: any) => (
+              {Array.isArray(users) && users.map((u: any) => (
                 <MenuItem key={u.id} value={u.id}>{u.name} (ID: {u.employeeId})</MenuItem>
               ))}
             </TextField>
@@ -203,7 +203,7 @@ export default function ReportsPage() {
               slotProps={{ select: { displayEmpty: true } }}
             >
               <MenuItem value="">All Skills</MenuItem>
-              {skills && skills.map((s: any) => (
+              {Array.isArray(skills) && skills.map((s: any) => (
                 <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
               ))}
             </TextField>

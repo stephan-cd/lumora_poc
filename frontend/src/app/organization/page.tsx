@@ -223,7 +223,7 @@ export default function OrganizationPage() {
           <Card sx={{ p: 3 }}>
             {usersLoading ? (
               <Box sx={{ display: 'flex', py: 8, justifyContent: 'center' }}><CircularProgress /></Box>
-            ) : !users || users.length === 0 ? (
+            ) : !Array.isArray(users) || users.length === 0 ? (
               <EmptyState message="No members found in directory." />
             ) : (
               <TableContainer component={Paper} sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider' }}>
@@ -297,7 +297,7 @@ export default function OrganizationPage() {
             </Typography>
             {treeLoading ? (
               <Box sx={{ display: 'flex', py: 8, justifyContent: 'center' }}><CircularProgress /></Box>
-            ) : !hierarchy || hierarchy.length === 0 ? (
+            ) : !Array.isArray(hierarchy) || hierarchy.length === 0 ? (
               <EmptyState message="No reporting hierarchies found." />
             ) : (
               <Box>

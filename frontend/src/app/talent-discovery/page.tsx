@@ -110,7 +110,7 @@ export default function TalentDiscoveryPage() {
                 slotProps={{ select: { displayEmpty: true } }}
               >
                 <MenuItem value="">Select Skill</MenuItem>
-                {skills && skills.map((s: any) => (
+                {Array.isArray(skills) && skills.map((s: any) => (
                   <MenuItem key={s.id} value={s.name}>{s.name}</MenuItem>
                 ))}
               </TextField>

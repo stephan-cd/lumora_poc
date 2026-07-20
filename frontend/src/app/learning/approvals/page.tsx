@@ -102,7 +102,7 @@ export default function ApprovalsPage() {
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked && records) {
+    if (e.target.checked && Array.isArray(records)) {
       setSelectedIds(records.map((r: any) => r.id));
     } else {
       setSelectedIds([]);
@@ -189,7 +189,7 @@ export default function ApprovalsPage() {
                 slotProps={{ select: { displayEmpty: true } }}
               >
                 <MenuItem value="">All Members</MenuItem>
-                {users && users.map((u: any) => (
+                {Array.isArray(users) && users.map((u: any) => (
                   <MenuItem key={u.id} value={u.id}>{u.name}</MenuItem>
                 ))}
               </TextField>
@@ -204,7 +204,7 @@ export default function ApprovalsPage() {
                 slotProps={{ select: { displayEmpty: true } }}
               >
                 <MenuItem value="">All Skills</MenuItem>
-                {skills && skills.map((s: any) => (
+                {Array.isArray(skills) && skills.map((s: any) => (
                   <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
                 ))}
               </TextField>
@@ -308,7 +308,7 @@ export default function ApprovalsPage() {
                 <TableRow>
                   <TableCell colSpan={activeTab === 0 ? 8 : 9} align="center"><CircularProgress size={24} /></TableCell>
                 </TableRow>
-              ) : !records || records.length === 0 ? (
+              ) : !Array.isArray(records) || records.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={activeTab === 0 ? 8 : 9} align="center" sx={{ p: 0 }}>
                     <EmptyState message="No learning logs found." />

@@ -132,11 +132,9 @@ export default function CodeReviewDashboard() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/code-review/${review.id}`} passHref legacyBehavior>
-                        <Button size="small" variant="text" color="primary" sx={{ fontWeight: 600 }}>
-                          View Details &rarr;
-                        </Button>
-                      </Link>
+                      <Button component={Link} href={`/code-review/${review.id}`} size="small" variant="text" color="primary" sx={{ fontWeight: 600 }}>
+                        View Details &rarr;
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

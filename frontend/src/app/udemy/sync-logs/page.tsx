@@ -34,7 +34,7 @@ export default function UdemySyncLogsPage() {
           <Box sx={{ display: 'flex', py: 8, justifyContent: 'center' }}><CircularProgress /></Box>
         ) : error ? (
           <Alert severity="error">Failed to load sync logs history.</Alert>
-        ) : !logs || logs.length === 0 ? (
+        ) : !Array.isArray(logs) || logs.length === 0 ? (
           <Box sx={{ py: 6, textAlign: 'center' }}>
             <Typography variant="body1" color="text.secondary">No sync logs found. Run a manual sync in Settings.</Typography>
           </Box>
