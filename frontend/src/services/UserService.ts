@@ -9,7 +9,7 @@ export class UserService {
     return UserRepository.findById(id);
   }
 
-  static async updateUserProfile(id: string, data: { name?: string; email?: string; designation?: string; department?: string }) {
+  static async updateUserProfile(id: string, data: { name?: string; email?: string; designation?: string; department?: string; useLocalLLM?: boolean }) {
     const updated = await UserRepository.update(id, data);
     await AuditLogRepository.log(id, 'PROFILE_UPDATE', `Updated user profile details for ${updated.email}`);
     return updated;

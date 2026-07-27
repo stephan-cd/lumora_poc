@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/lumora/backend/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,16 +25,7 @@ func ConnectPostgres() {
 
 	fmt.Println("Successfully connected to PostgreSQL.")
 
-	// Auto-migrate the models
-	err = DB.AutoMigrate(
-		&models.Repository{},
-		&models.Commit{},
-		&models.Review{},
-		&models.ReviewIssue{},
-	)
-	if err != nil {
-		log.Fatal("Failed to auto-migrate database:", err)
-	}
-
-	fmt.Println("Database migration completed.")
+	// Note: Auto-migrate has been disabled.
+	// Schema definitions and seed data are now managed via raw SQL scripts in the /db directory.
+	fmt.Println("Database connection established (schema managed via init scripts).")
 }

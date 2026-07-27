@@ -5,6 +5,7 @@ package models
 type User struct {
 	ID             string `gorm:"column:id;primaryKey"`
 	GithubUsername string `gorm:"column:githubUsername"`
+	UseLocalLLM    bool   `gorm:"column:useLocalLLM"`
 }
 
 // TableName overrides the table name used by User to exactly match Prisma's output

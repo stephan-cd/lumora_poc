@@ -19,9 +19,16 @@ async function requireAuth() {
 }
 
 // --- PROFILE & PASSWORD ACTIONS ---
-export async function updateProfileAction(data: { name: string; email: string; designation: string; department: string }) {
+export async function updateProfileAction(data: { name: string; email: string; designation: string; department: string; useLocalLLM?: boolean }) {
   const user = await requireAuth();
   const result = await UserService.updateUserProfile(user.id, data);
+  revalidatePath('/dashboard');
+  return { success: true, user: result };
+}
+
+export async function updateLLMPrefAction(useLocalLLM: boolean) {
+  const user = await requireAuth();
+  const result = await UserService.updateUserProfile(user.id, { useLocalLLM });
   revalidatePath('/dashboard');
   return { success: true, user: result };
 }

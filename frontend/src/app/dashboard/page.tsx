@@ -28,7 +28,9 @@ import {
   FormControl,
   InputLabel,
   Avatar,
-  Chip
+  Chip,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
 
 import {
@@ -58,7 +60,7 @@ import {
   Pie
 } from 'recharts';
 
-import { updateProfileAction, changePasswordAction, setLearningGoalAction } from '@/app/actions';
+import { updateProfileAction, changePasswordAction, setLearningGoalAction, updateLLMPrefAction } from '@/app/actions';
 
 const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899'];
 
@@ -129,6 +131,15 @@ export default function DashboardPage() {
       setProfileSuccess('Profile details updated successfully!');
     } catch (err: any) {
       setProfileError(err?.message || 'Failed to update profile.');
+    }
+  };
+
+  const handleToggleLLM = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      await updateLLMPrefAction(e.target.checked);
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -397,6 +408,23 @@ export default function DashboardPage() {
                   Change Password
                 </Button>
               </form>
+            </Card>
+            {/* AI Preferences Section */}
+            <Card sx={{ p: 4 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>AI Preferences</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Configure whether to use Local LLM for your AI Code Reviews and AI Profile Generation, or default to Groq's faster API.
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={dashboardData?.useLocalLLM || false}
+                    onChange={handleToggleLLM}
+                    color="primary"
+                  />
+                }
+                label="Use Local LLM (Ollama)"
+              />
             </Card>
           </Box>
         </CustomTabPanel>

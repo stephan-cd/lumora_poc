@@ -17,7 +17,9 @@ export async function GET(req: NextRequest) {
       data = await AnalyticsService.getTeamMemberDashboard(user.id);
     }
 
-    return NextResponse.json({ role: user.role, ...data });
+    const dbUser = await import('@/lib/prisma').then(m => m.default.user.findUnique({ where: { id: user.id }, select: { useLocalLLM: true } }));
+
+    return NextResponse.json({ role: user.role, useLocalLLM: dbUser?.useLocalLLM || false, ...data });
   } catch (error) {
     return apiServerError(error);
   }

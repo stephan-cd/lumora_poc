@@ -8,20 +8,21 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
-type GroqMessage struct {
+type LLMMessage struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
 
-type GroqRequest struct {
-	Model       string        `json:"model"`
-	Messages    []GroqMessage `json:"messages"`
-	Temperature float32       `json:"temperature,omitempty"`
+type LLMRequest struct {
+	Model       string       `json:"model"`
+	Messages    []LLMMessage `json:"messages"`
+	Temperature float32      `json:"temperature,omitempty"`
 }
 
-type GroqResponse struct {
+type LLMResponse struct {
 	Choices []struct {
 		Message struct {
 			Content string `json:"content"`
@@ -72,38 +73,68 @@ func GenerateEmbedding(text string) ([]float32, error) {
 	return embedResp.Embedding, nil
 }
 
-func GenerateReview(diff string, rules []string) (string, error) {
+func GenerateReview(diff string, rules []string, useLocalLLM bool) (string, error) {
 	prompt := BuildReviewPrompt(diff, rules)
 
-	apiKey := os.Getenv("GROQ_API_KEY")
-	if apiKey == "" {
-		return "", fmt.Errorf("GROQ_API_KEY environment variable is not set")
-	}
+	fmt.Printf("\n[LLM] ================= PROMPT =================\n%s\n==========================================\n\n", prompt)
 
-	reqBody := GroqRequest{
-		Model: "llama-3.3-70b-versatile",
-		Messages: []GroqMessage{
-			{
-				Role:    "user",
-				Content: prompt,
+	var req *http.Request
+	var err error
+
+	if useLocalLLM {
+		// Using Local LLM API.
+		reqBody := LLMRequest{
+			Model: "qwen2:0.5b",
+			Messages: []LLMMessage{
+				{
+					Role:    "user",
+					Content: prompt,
+				},
 			},
-		},
-		Temperature: 0.2, // low temp for more factual reviews
+			Temperature: 0.2, // low temp for more factual reviews
+		}
+
+		jsonData, err := json.Marshal(reqBody)
+		if err != nil {
+			return "", err
+		}
+
+		req, err = http.NewRequest("POST", "http://localhost:11434/v1/chat/completions", bytes.NewBuffer(jsonData))
+		if err != nil {
+			return "", err
+		}
+		req.Header.Set("Content-Type", "application/json")
+		fmt.Println("[LLM] Sending request to Local LLM (qwen2:0.5b)...")
+	} else {
+		// Using Groq API.
+		reqBody := LLMRequest{
+			Model: "llama-3.3-70b-versatile",
+			Messages: []LLMMessage{
+				{
+					Role:    "user",
+					Content: prompt,
+				},
+			},
+			Temperature: 0.2, // low temp for more factual reviews
+		}
+
+		jsonData, err := json.Marshal(reqBody)
+		if err != nil {
+			return "", err
+		}
+
+		req, err = http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(jsonData))
+		if err != nil {
+			return "", err
+		}
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+os.Getenv("GROQ_API_KEY"))
+		fmt.Println("[LLM] Sending request to Groq (llama-3.3-70b-versatile)...")
 	}
 
-	jsonData, err := json.Marshal(reqBody)
-	if err != nil {
-		return "", err
+	client := &http.Client{
+		Timeout: 2 * time.Minute,
 	}
-
-	req, err := http.NewRequest("POST", "https://api.groq.com/openai/v1/chat/completions", bytes.NewBuffer(jsonData))
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+apiKey)
-
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
@@ -112,7 +143,7 @@ func GenerateReview(diff string, rules []string) (string, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := ioutil.ReadAll(resp.Body)
-		return "", fmt.Errorf("Groq API failed with status %d: %s", resp.StatusCode, string(body))
+		return "", fmt.Errorf("LLM API failed with status %d: %s", resp.StatusCode, string(body))
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
@@ -120,18 +151,23 @@ func GenerateReview(diff string, rules []string) (string, error) {
 		return "", err
 	}
 
-	var groqResp GroqResponse
-	err = json.Unmarshal(body, &groqResp)
+	var llmResp LLMResponse
+	err = json.Unmarshal(body, &llmResp)
 	if err != nil {
 		return "", err
 	}
 
-	if len(groqResp.Choices) == 0 {
-		return "", fmt.Errorf("no response choices returned from Groq API")
+	if len(llmResp.Choices) == 0 {
+		return "", fmt.Errorf("no response choices returned from Local LLM API")
 	}
 
+	fmt.Println("[LLM] Successfully received response from Local LLM!")
+
+	rawOutput := llmResp.Choices[0].Message.Content
+	fmt.Printf("\n[LLM] ================= OUTPUT =================\n%s\n==========================================\n\n", rawOutput)
+
 	// Clean up potential markdown code blocks returned by LLM
-	cleanJson := strings.TrimSpace(groqResp.Choices[0].Message.Content)
+	cleanJson := strings.TrimSpace(llmResp.Choices[0].Message.Content)
 	if strings.HasPrefix(cleanJson, "```json") {
 		cleanJson = strings.TrimPrefix(cleanJson, "```json")
 		cleanJson = strings.TrimSuffix(cleanJson, "```")
@@ -141,4 +177,68 @@ func GenerateReview(diff string, rules []string) (string, error) {
 	}
 
 	return strings.TrimSpace(cleanJson), nil
+}
+
+func GenerateText(prompt string) (string, error) {
+	fmt.Printf("\n[LLM] ================= TEXT GENERATION PROMPT =================\n%s\n==========================================\n\n", prompt)
+
+	reqBody := LLMRequest{
+		Model: "qwen2:0.5b",
+		Messages: []LLMMessage{
+			{
+				Role:    "user",
+				Content: prompt,
+			},
+		},
+		Temperature: 0.7,
+	}
+
+	jsonData, err := json.Marshal(reqBody)
+	if err != nil {
+		return "", err
+	}
+
+	req, err := http.NewRequest("POST", "http://localhost:11434/v1/chat/completions", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	fmt.Println("[LLM] Sending text generation request to Local LLM (qwen2:0.5b)...")
+
+	client := &http.Client{
+		Timeout: 2 * time.Minute,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := ioutil.ReadAll(resp.Body)
+		return "", fmt.Errorf("Local LLM API failed with status %d: %s", resp.StatusCode, string(body))
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var llmResp LLMResponse
+	err = json.Unmarshal(body, &llmResp)
+	if err != nil {
+		return "", err
+	}
+
+	if len(llmResp.Choices) == 0 {
+		return "", fmt.Errorf("no response choices returned from Local LLM API")
+	}
+
+	fmt.Println("[LLM] Successfully received text response from Local LLM!")
+
+	rawOutput := llmResp.Choices[0].Message.Content
+	fmt.Printf("\n[LLM] ================= TEXT GENERATION OUTPUT =================\n%s\n==========================================\n\n", rawOutput)
+
+	return strings.TrimSpace(rawOutput), nil
 }

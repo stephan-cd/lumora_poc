@@ -135,7 +135,7 @@ export default function ReviewDetails() {
                           sx={{ bgcolor: '#ffedd5', color: '#9a3412', fontWeight: 700, fontSize: '0.65rem', textTransform: 'uppercase', height: 20 }}
                         />
                       </Box>
-                      
+
                       <Typography variant="body2" sx={{ color: '#9a3412', mb: 2, lineHeight: 1.6 }}>
                         {issue.explanation}
                       </Typography>

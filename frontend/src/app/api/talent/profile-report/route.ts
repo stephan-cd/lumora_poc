@@ -37,11 +37,11 @@ export async function POST(req: Request) {
 
     // Prepare data
     const totalLearningHours = user.learningEntries.reduce((sum, entry) => sum + entry.hoursSpent, 0);
-    
+
     let totalScore = 0;
     let reviewCount = 0;
     let issuesSummarized: any[] = [];
-    
+
     user.commits.forEach(commit => {
       commit.reviews.forEach(review => {
         totalScore += review.score;
@@ -82,12 +82,33 @@ The report should include:
 Make it encouraging but objective. Use professional tone.
 `;
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
-      model: 'llama3-70b-8192',
-    });
+    let reportContent = 'Failed to generate report.';
 
-    const reportContent = chatCompletion.choices[0]?.message?.content || 'Failed to generate report.';
+    if (user.useLocalLLM) {
+      console.log('Generating AI Profile using Local LLM (qwen2:0.5b)...');
+      const response = await fetch('http://localhost:11434/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'qwen2:0.5b',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Local LLM API failed with status ${response.status}`);
+      }
+      const data = await response.json();
+      reportContent = data.choices?.[0]?.message?.content || reportContent;
+    } else {
+      console.log('Generating AI Profile using Groq (llama-3.3-70b-versatile)...');
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [{ role: 'user', content: prompt }],
+        model: 'llama-3.3-70b-versatile',
+      });
+      reportContent = chatCompletion.choices[0]?.message?.content || reportContent;
+    }
 
     // Save to DB
     const updatedReport = await prisma.userProfileReport.upsert({

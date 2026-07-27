@@ -81,6 +81,7 @@ model User {
   subordinates     User[]       @relation("ReportingHierarchy")
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
+  useLocalLLM      Boolean      @default(false)
 
   learningEntries  LearningEntry[] @relation("UserLearning")
   approvedEntries  LearningEntry[] @relation("ApproverLearning")

@@ -76,7 +76,7 @@ func ProcessCommit(repositoryFullName, commitHash, author string) {
 	}
 
 	// 5. Generate AI Review
-	reviewJSON, err := ai.GenerateReview(cleanDiff, rules)
+	reviewJSON, err := ai.GenerateReview(cleanDiff, rules, user.UseLocalLLM)
 	if err != nil {
 		log.Printf("Failed to generate AI review for %s: %v", commitHash, err)
 		db.DB.Model(&review).Update("status", "failed")
@@ -94,7 +94,7 @@ func ProcessCommit(repositoryFullName, commitHash, author string) {
 	for i := range issues {
 		issues[i].ReviewID = review.ID
 	}
-	
+
 	if len(issues) > 0 {
 		db.DB.Create(&issues)
 	}
@@ -123,7 +123,7 @@ func min(a, b int) int {
 func filterDiff(rawDiff string) string {
 	lines := strings.Split(rawDiff, "\n")
 	var filtered []string
-	
+
 	for _, line := range lines {
 		if strings.Contains(line, "Binary files") || strings.Contains(line, "GIT binary patch") {
 			continue
@@ -146,6 +146,9 @@ func detectTechnology(diff string) string {
 	}
 	if strings.Contains(diff, ".py ") || strings.Contains(diff, ".py\n") {
 		return "Python"
+	}
+	if strings.Contains(diff, ".java ") || strings.Contains(diff, ".java\n") {
+		return "Java"
 	}
 	return "General"
 }

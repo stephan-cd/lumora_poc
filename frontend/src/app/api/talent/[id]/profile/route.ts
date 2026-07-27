@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getApiSession, apiUnauthorized, apiServerError } from '@/lib/apiHelper';
 import prisma from '@/lib/prisma';
-import Groq from 'groq-sdk';
+
+async function generateTextViaBackend(prompt: string): Promise<string> {
+  const res = await fetch('http://localhost:8080/api/v1/ai/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Backend AI returned ${res.status}: ${errorText}`);
+  }
+  const data = await res.json();
+  return data.response;
+}
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> | { id: string } }) {
   try {
@@ -38,11 +51,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const groqApiKey = process.env.GROQ_API_KEY;
-    if (!groqApiKey) {
-      throw new Error('GROQ_API_KEY is not configured');
-    }
-    const groq = new Groq({ apiKey: groqApiKey });
 
     // Initialize or fetch the existing profile report record
     let profileReport = user.profileReport;
@@ -69,16 +77,15 @@ Analyze the following learning summary for the employee ${user.name} who holds t
 Learning Data:
 ${learningSummary || "No learning hours logged yet."}
 `;
-      const response = await groq.chat.completions.create({
-        model: 'llama-3.1-8b-instant',
-        messages: [{ role: 'user', content: learningPrompt }],
-        temperature: 0.7,
-        max_tokens: 800
-      });
+      console.log('\n[LLM - Talent Profile] ================= LEARNING PROMPT =================\n', learningPrompt, '\n==========================================\n\n');
+
+      const generatedContent = await generateTextViaBackend(learningPrompt);
+
+      console.log('\n[LLM - Talent Profile] ================= LEARNING OUTPUT =================\n', generatedContent, '\n==========================================\n\n');
 
       profileReport = await prisma.userProfileReport.update({
         where: { id: profileReport.id },
-        data: { learningReport: response.choices[0]?.message?.content || 'Learning Report generation failed.' }
+        data: { learningReport: generatedContent || 'Learning Report generation failed.' }
       });
     }
 
@@ -110,16 +117,15 @@ Average Score: ${avgScore}/100
 Recent Issues:
 ${recentIssues || "No code issues reported."}
 `;
-      const response = await groq.chat.completions.create({
-        model: 'llama-3.1-8b-instant',
-        messages: [{ role: 'user', content: codeReviewPrompt }],
-        temperature: 0.7,
-        max_tokens: 800
-      });
+      console.log('\n[LLM - Talent Profile] ================= CODE REVIEW PROMPT =================\n', codeReviewPrompt, '\n==========================================\n\n');
+
+      const generatedContent = await generateTextViaBackend(codeReviewPrompt);
+
+      console.log('\n[LLM - Talent Profile] ================= CODE REVIEW OUTPUT =================\n', generatedContent, '\n==========================================\n\n');
 
       profileReport = await prisma.userProfileReport.update({
         where: { id: profileReport.id },
-        data: { codeReviewReport: response.choices[0]?.message?.content || 'Code Review Report generation failed.' }
+        data: { codeReviewReport: generatedContent || 'Code Review Report generation failed.' }
       });
     }
 
@@ -150,14 +156,11 @@ Please structure the final report with the following Markdown headers:
 ## Recommended Learning Path
 `;
 
-    const response = await groq.chat.completions.create({
-      model: 'llama-3.1-8b-instant',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 1500
-    });
+    console.log('\n[LLM - Talent Profile] ================= FINAL PROFILE PROMPT =================\n', prompt, '\n==========================================\n\n');
 
-    const markdownReport = response.choices[0]?.message?.content || '*Report generation failed.*';
+    const markdownReport = await generateTextViaBackend(prompt) || '*Report generation failed.*';
+
+    console.log('\n[LLM - Talent Profile] ================= FINAL PROFILE OUTPUT =================\n', markdownReport, '\n==========================================\n\n');
 
     await prisma.userProfileReport.update({
       where: { id: profileReport.id },
@@ -168,9 +171,6 @@ Please structure the final report with the following Markdown headers:
 
   } catch (error: any) {
     console.error('Profile Generation Error:', error);
-    if (error.error && error.error.error) {
-      console.error("Groq Details:", error.error.error);
-    }
-    return NextResponse.json({ error: error.message || 'Internal Server Error', details: error.error || {} }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Internal Server Error', details: error.message || {} }, { status: 500 });
   }
 }
