@@ -36,7 +36,7 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  
+
   // Forgot Password modal state
   const [forgotOpen, setForgotOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
@@ -141,7 +141,7 @@ export default function LoginPage() {
               error={!!errors.email}
               helperText={errors.email?.message}
               slotProps={{ inputLabel: { shrink: true } }}
-              placeholder="e.g. employee@lumora.com"
+              placeholder="e.g. employee@clouddestinations.com"
             />
             <TextField
               {...register('password')}

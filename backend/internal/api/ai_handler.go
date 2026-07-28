@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,8 @@ import (
 )
 
 type GenerateTextRequest struct {
-	Prompt string `json:"prompt" binding:"required"`
+	Prompt      string `json:"prompt" binding:"required"`
+	UseLocalLLM bool   `json:"useLocalLLM"`
 }
 
 func GenerateText(c *gin.Context) {
@@ -18,7 +20,10 @@ func GenerateText(c *gin.Context) {
 		return
 	}
 
-	response, err := ai.GenerateText(req.Prompt)
+	// Add log to track UseLocalLLM flag
+	log.Printf("[AI Handler] GenerateText called. UseLocalLLM from frontend: %v", req.UseLocalLLM)
+
+	response, err := ai.GenerateText(req.Prompt, req.UseLocalLLM)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

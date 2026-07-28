@@ -30,7 +30,9 @@ func ProcessCommit(repositoryFullName, commitHash, author string) {
 	var userID *string
 	if err := db.DB.Where("\"githubUsername\" = ?", author).First(&user).Error; err == nil {
 		userID = &user.ID
-		log.Printf("Linked commit to User %s", user.ID)
+		log.Printf("Linked commit to User %s. UseLocalLLM preference is: %v", user.ID, user.UseLocalLLM)
+	} else {
+		log.Printf("Could not find user with githubUsername %s: %v", author, err)
 	}
 
 	// DB Setup: Create Commit

@@ -54,6 +54,7 @@ export class UserRepository {
     role?: Role;
     managerId?: string;
     status?: UserStatus;
+    useLocalLLM?: boolean;
   }) {
     return prisma.user.update({
       where: { id },

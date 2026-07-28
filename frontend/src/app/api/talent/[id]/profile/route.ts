@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getApiSession, apiUnauthorized, apiServerError } from '@/lib/apiHelper';
 import prisma from '@/lib/prisma';
 
-async function generateTextViaBackend(prompt: string): Promise<string> {
+async function generateTextViaBackend(prompt: string, useLocalLLM: boolean): Promise<string> {
   const res = await fetch('http://localhost:8080/api/v1/ai/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt })
+    body: JSON.stringify({ prompt, useLocalLLM })
   });
   if (!res.ok) {
     const errorText = await res.text();
@@ -79,7 +79,7 @@ ${learningSummary || "No learning hours logged yet."}
 `;
       console.log('\n[LLM - Talent Profile] ================= LEARNING PROMPT =================\n', learningPrompt, '\n==========================================\n\n');
 
-      const generatedContent = await generateTextViaBackend(learningPrompt);
+      const generatedContent = await generateTextViaBackend(learningPrompt, user.useLocalLLM);
 
       console.log('\n[LLM - Talent Profile] ================= LEARNING OUTPUT =================\n', generatedContent, '\n==========================================\n\n');
 
@@ -119,7 +119,7 @@ ${recentIssues || "No code issues reported."}
 `;
       console.log('\n[LLM - Talent Profile] ================= CODE REVIEW PROMPT =================\n', codeReviewPrompt, '\n==========================================\n\n');
 
-      const generatedContent = await generateTextViaBackend(codeReviewPrompt);
+      const generatedContent = await generateTextViaBackend(codeReviewPrompt, user.useLocalLLM);
 
       console.log('\n[LLM - Talent Profile] ================= CODE REVIEW OUTPUT =================\n', generatedContent, '\n==========================================\n\n');
 
@@ -158,7 +158,7 @@ Please structure the final report with the following Markdown headers:
 
     console.log('\n[LLM - Talent Profile] ================= FINAL PROFILE PROMPT =================\n', prompt, '\n==========================================\n\n');
 
-    const markdownReport = await generateTextViaBackend(prompt) || '*Report generation failed.*';
+    const markdownReport = await generateTextViaBackend(prompt, user.useLocalLLM) || '*Report generation failed.*';
 
     console.log('\n[LLM - Talent Profile] ================= FINAL PROFILE OUTPUT =================\n', markdownReport, '\n==========================================\n\n');
 
