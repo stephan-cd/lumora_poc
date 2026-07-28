@@ -20,6 +20,7 @@ func SetupRoutes(r *gin.Engine) {
 		// Review endpoints
 		v1.GET("/reviews", GetReviews)
 		v1.GET("/reviews/:id", GetReviewByID)
+		v1.POST("/reviews/upload", HandleFileUploadReview)
 
 		// Webhook endpoints
 		webhooks := r.Group("/webhooks")

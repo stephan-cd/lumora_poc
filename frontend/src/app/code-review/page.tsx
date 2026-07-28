@@ -55,8 +55,8 @@ export default function CodeReviewDashboard() {
         <Typography variant="h5" sx={{ fontWeight: 700, fontFamily: 'var(--font-outfit)' }}>
           Recent Code Reviews
         </Typography>
-        <Button variant="contained" color="primary">
-          Add Repository
+        <Button variant="contained" color="primary" component={Link} href="/code-review/upload">
+          Upload and Review
         </Button>
       </Box>
 
