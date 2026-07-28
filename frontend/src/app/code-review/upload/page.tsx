@@ -28,6 +28,7 @@ import {
   Warning as WarningIcon,
   ErrorOutlined as ErrorIcon,
   ArrowBack as ArrowBackIcon,
+  FolderOpen as FolderOpenIcon,
 } from '@mui/icons-material';
 import Link from 'next/link';
 
@@ -38,6 +39,7 @@ export default function CodeReviewUpload() {
   const [error, setError] = useState('');
   const [reviewResults, setReviewResults] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -63,7 +65,9 @@ export default function CodeReviewUpload() {
 
     const formData = new FormData();
     selectedFiles.forEach((file) => {
-      formData.append('files', file);
+      // Use webkitRelativePath if available so backend receives the folder path structure
+      const path = (file as any).webkitRelativePath || file.name;
+      formData.append('files', file, path);
     });
     
     // Add useLocalLLM preference if session has it (or fallback to false)
@@ -121,27 +125,46 @@ export default function CodeReviewUpload() {
             style={{ display: 'none' }}
             onChange={handleFileChange}
           />
+          <input
+            type="file"
+            // @ts-ignore
+            webkitdirectory=""
+            directory=""
+            multiple
+            ref={folderInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
           
           <Box
-            onClick={handleUploadClick}
             sx={{
               border: '2px dashed',
               borderColor: 'divider',
               borderRadius: 2,
               p: 6,
               textAlign: 'center',
-              cursor: 'pointer',
               mb: 4,
-              '&:hover': {
-                bgcolor: 'action.hover',
-                borderColor: 'primary.main'
-              }
             }}
           >
             <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="body1" sx={{ fontWeight: 600 }}>
-              Click to select files or drag and drop
+            <Typography variant="body1" sx={{ fontWeight: 600, mb: 2 }}>
+              Drag and drop files/folders, or click to browse
             </Typography>
+            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+              <Button 
+                variant="outlined" 
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Select Files
+              </Button>
+              <Button 
+                variant="outlined" 
+                onClick={() => folderInputRef.current?.click()}
+                startIcon={<FolderOpenIcon />}
+              >
+                Select Folder
+              </Button>
+            </Box>
           </Box>
 
           {selectedFiles.length > 0 && (
@@ -158,7 +181,10 @@ export default function CodeReviewUpload() {
                   <ListItemIcon>
                     <FileIcon color="primary" />
                   </ListItemIcon>
-                  <ListItemText primary={file.name} secondary={`${(file.size / 1024).toFixed(1)} KB`} />
+                  <ListItemText 
+                    primary={(file as any).webkitRelativePath || file.name} 
+                    secondary={`${(file.size / 1024).toFixed(1)} KB`} 
+                  />
                 </ListItem>
               ))}
             </List>
