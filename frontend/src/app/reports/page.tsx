@@ -44,7 +44,7 @@ export default function ReportsPage() {
   // Queries for selectors
   const { data: users } = useQuery({
     queryKey: ['users'],
-    queryFn: () => fetch('/api/organization/users').then(res => res.json())
+    queryFn: () => fetch('/api/department/users').then(res => res.json())
   });
 
   const { data: skills } = useQuery({

@@ -49,7 +49,7 @@ export async function createReportingManagerAction(data: {
 }) {
   const user = await requireAuth();
   const manager = await UserService.towerHeadCreateManager(user.id, data);
-  revalidatePath('/organization');
+  revalidatePath('/department');
   return { success: true, user: manager };
 }
 
@@ -60,7 +60,7 @@ export async function editReportingManagerAction(managerId: string, data: {
 }) {
   const user = await requireAuth();
   const manager = await UserService.towerHeadEditManager(user.id, managerId, data);
-  revalidatePath('/organization');
+  revalidatePath('/department');
   return { success: true, user: manager };
 }
 
@@ -73,7 +73,7 @@ export async function createTeamMemberAction(data: {
 }) {
   const user = await requireAuth();
   const member = await UserService.managerCreateTeamMember(user.id, data);
-  revalidatePath('/organization');
+  revalidatePath('/department');
   return { success: true, user: member };
 }
 
@@ -84,14 +84,14 @@ export async function editTeamMemberAction(memberId: string, data: {
 }) {
   const user = await requireAuth();
   const member = await UserService.managerEditTeamMember(user.id, memberId, data);
-  revalidatePath('/organization');
+  revalidatePath('/department');
   return { success: true, user: member };
 }
 
 export async function disableUserAction(targetUserId: string) {
   const user = await requireAuth();
   await UserService.disableUser(user.id, targetUserId);
-  revalidatePath('/organization');
+  revalidatePath('/department');
   return { success: true };
 }
 

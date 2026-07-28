@@ -77,7 +77,7 @@ export default function ApprovalsPage() {
 
   const { data: users } = useQuery({
     queryKey: ['users'],
-    queryFn: () => fetch('/api/organization/users').then(res => res.json())
+    queryFn: () => fetch('/api/department/users').then(res => res.json())
   });
 
   const { data: records, isLoading } = useQuery({

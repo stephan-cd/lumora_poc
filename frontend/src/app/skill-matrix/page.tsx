@@ -46,7 +46,7 @@ export default function SkillMatrixPage() {
   // Queries
   const { data: managers } = useQuery({
     queryKey: ['managers'],
-    queryFn: () => fetch('/api/organization/users?type=managers').then(res => res.json())
+    queryFn: () => fetch('/api/department/users?type=managers').then(res => res.json())
   });
 
   const { data: allSkills } = useQuery({

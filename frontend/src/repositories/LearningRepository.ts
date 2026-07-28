@@ -217,120 +217,93 @@ export class LearningRepository {
 
   // --- Talent Discovery ---
   static async discoverTalent(filters: {
-    skillId?: string;
-    skillNameQuery?: string;
-    minHours?: number;
-    minCodeQuality?: number;
-    proficiencyLevel?: ProficiencyLevel;
+    teamId?: string;
   }) {
     const where: any = {
-      status: ApprovalStatus.APPROVED
+      status: 'ACTIVE'
     };
 
-    if (filters.skillId) {
-      where.skillId = filters.skillId;
-    } else if (filters.skillNameQuery) {
-      where.skill = {
-        name: {
-          contains: filters.skillNameQuery,
-          mode: 'insensitive'
-        }
-      };
+    if (filters.teamId) {
+      where.managerId = filters.teamId;
     }
 
-    // Fetch aggregate hours by user for the skill
-    const logs = await prisma.learningEntry.findMany({
+    const users = await prisma.user.findMany({
       where,
       include: {
-        user: {
-          include: {
-            manager: { select: { name: true } },
-            proficiencies: {
-              include: { skill: true }
-            },
-            commits: {
-              include: { reviews: true }
-            }
-          }
+        manager: { select: { name: true } },
+        proficiencies: {
+          include: { skill: true }
         },
-        skill: true
+        commits: {
+          include: { reviews: true }
+        },
+        learningEntries: {
+          where: { status: ApprovalStatus.APPROVED },
+          include: { skill: true }
+        }
       }
     });
 
-    // Group logs by User + Skill
-    const grouped: { [key: string]: {
-      userId: string;
-      employeeId: string;
-      name: string;
-      email: string;
-      designation: string;
-      department: string;
-      managerName: string;
-      skillName: string;
-      hours: number;
-      proficiency: string;
-      lastLearningDate: Date;
-      avgCodeQuality?: number | null;
-    }} = {};
+    const results = users.map(user => {
+      // Calculate Total Hours & find top skill / last date
+      let totalHours = 0;
+      let lastLearningDate: Date | null = null;
+      let skillName = 'N/A';
+      let maxSkillHours = 0;
+      let topSkillProficiency = 'BEGINNER';
 
-    for (const log of logs) {
-      const key = `${log.userId}_${log.skillId}`;
-      if (!grouped[key]) {
-        // Find proficiency for this skill
-        const userProf = log.user.proficiencies.find(p => p.skillId === log.skillId);
+      const skillHoursMap: { [skillId: string]: { name: string; hours: number } } = {};
 
-        // Calculate Code Quality Score
-        let totalScore = 0;
-        let reviewCount = 0;
-        if (log.user.commits) {
-          for (const commit of log.user.commits) {
-            for (const review of commit.reviews) {
-              if (review.status === 'completed') {
-                totalScore += review.score;
-                reviewCount++;
-              }
-            }
+      for (const log of user.learningEntries) {
+        totalHours += log.hoursSpent;
+        if (!lastLearningDate || log.date > lastLearningDate) {
+          lastLearningDate = log.date;
+        }
+        
+        if (!skillHoursMap[log.skillId]) {
+          skillHoursMap[log.skillId] = { name: log.skill.name, hours: 0 };
+        }
+        skillHoursMap[log.skillId].hours += log.hoursSpent;
+      }
+
+      // Find top skill by hours
+      for (const skillId in skillHoursMap) {
+        if (skillHoursMap[skillId].hours > maxSkillHours) {
+          maxSkillHours = skillHoursMap[skillId].hours;
+          skillName = skillHoursMap[skillId].name;
+          const userProf = user.proficiencies.find(p => p.skillId === skillId);
+          if (userProf) topSkillProficiency = userProf.level;
+        }
+      }
+
+      // Calculate Code Quality Score
+      let totalScore = 0;
+      let reviewCount = 0;
+      for (const commit of user.commits) {
+        for (const review of commit.reviews) {
+          if (review.status === 'completed') {
+            totalScore += review.score;
+            reviewCount++;
           }
         }
-        const avgCodeQuality = reviewCount > 0 ? Math.round(totalScore / reviewCount) : null;
-
-        grouped[key] = {
-          userId: log.user.id,
-          employeeId: log.user.employeeId,
-          name: log.user.name,
-          email: log.user.email,
-          designation: log.user.designation,
-          department: log.user.department,
-          managerName: log.user.manager?.name || 'N/A',
-          skillName: log.skill.name,
-          hours: 0,
-          proficiency: userProf?.level || 'BEGINNER',
-          lastLearningDate: log.date,
-          avgCodeQuality: avgCodeQuality
-        };
       }
-      grouped[key].hours += log.hoursSpent;
-      if (log.date > grouped[key].lastLearningDate) {
-        grouped[key].lastLearningDate = log.date;
-      }
-    }
+      const avgCodeQuality = reviewCount > 0 ? Math.round(totalScore / reviewCount) : null;
 
-    let results = Object.values(grouped);
-
-    // Apply minimum hours filter
-    if (filters.minHours !== undefined) {
-      results = results.filter(r => r.hours >= filters.minHours!);
-    }
-
-    // Apply minimum code quality filter
-    if (filters.minCodeQuality !== undefined) {
-      results = results.filter(r => r.avgCodeQuality !== null && r.avgCodeQuality >= filters.minCodeQuality!);
-    }
-
-    // Apply proficiency level filter
-    if (filters.proficiencyLevel) {
-      results = results.filter(r => r.proficiency === filters.proficiencyLevel);
-    }
+      return {
+        userId: user.id,
+        employeeId: user.employeeId,
+        name: user.name,
+        email: user.email,
+        designation: user.designation,
+        department: user.department,
+        managerName: user.manager?.name || 'N/A',
+        skillName: skillName,
+        hours: totalHours,
+        proficiency: topSkillProficiency,
+        lastLearningDate: lastLearningDate || new Date(0), // Fallback if no entries
+        avgCodeQuality: avgCodeQuality
+      };
+    });
 
     return results;
   }

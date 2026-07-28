@@ -323,7 +323,7 @@ export default function AnalyticsPage() {
                       Missing Skill Capabilities
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                      Critical preloaded industry skills with 0 hours logged in the organization. Potential capability risk.
+                      Critical preloaded industry skills with 0 hours logged in the department. Potential capability risk.
                     </Typography>
                     <List>
                       {gapAnalysis.missingSkills?.map((s: any, idx: number) => (

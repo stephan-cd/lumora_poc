@@ -9,22 +9,10 @@ export async function GET(req: NextRequest) {
     if (!user) return apiUnauthorized();
 
     const { searchParams } = new URL(req.url);
-    const skillId = searchParams.get('skillId') || undefined;
-    const skillQuery = searchParams.get('skillQuery') || undefined;
-    const minHoursStr = searchParams.get('minHours');
-    const minCodeQualityStr = searchParams.get('minCodeQuality');
-    const levelStr = searchParams.get('level');
-
-    const minHours = minHoursStr ? parseFloat(minHoursStr) : undefined;
-    const minCodeQuality = minCodeQualityStr ? parseFloat(minCodeQualityStr) : undefined;
-    const level = levelStr ? levelStr as ProficiencyLevel : undefined;
+    const teamId = searchParams.get('teamId') || undefined;
 
     const talent = await LearningService.discoverTalent({
-      skillId,
-      skillNameQuery: skillQuery,
-      minHours,
-      minCodeQuality,
-      proficiencyLevel: level
+      teamId
     });
 
     return NextResponse.json(talent);

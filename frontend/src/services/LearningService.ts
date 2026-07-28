@@ -303,11 +303,7 @@ export class LearningService {
 
   // --- Talent Discovery ---
   static async discoverTalent(filters: {
-    skillId?: string;
-    skillNameQuery?: string;
-    minHours?: number;
-    minCodeQuality?: number;
-    proficiencyLevel?: ProficiencyLevel;
+    teamId?: string;
   }) {
     return LearningRepository.discoverTalent(filters);
   }

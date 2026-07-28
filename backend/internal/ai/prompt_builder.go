@@ -4,7 +4,7 @@ import "fmt"
 
 func BuildReviewPrompt(diff string, rules []string) string {
 	prompt := "You are an expert AI Code Reviewer.\n\n"
-	prompt += "Review the following git diff against the provided organizational coding rules.\n"
+	prompt += "Review the following git diff against the provided departmental coding rules.\n"
 	prompt += "Return the response strictly as a JSON array of issues.\n\n"
 
 	prompt += "Coding Rules:\n"

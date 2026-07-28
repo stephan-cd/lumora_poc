@@ -71,7 +71,7 @@ import MetricCard from '@/components/molecules/MetricCard';
 export default function DashboardPage() {
   const queryClient = useQueryClient();
   const [tabValue, setTabValue] = useState(0);
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const user = session?.user;
 
   // Queries
@@ -137,7 +137,9 @@ export default function DashboardPage() {
 
   const handleToggleLLM = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      await updateLLMPrefAction(e.target.checked);
+      const checked = e.target.checked;
+      await updateLLMPrefAction(checked);
+      await updateSession({ useLocalLLM: checked });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     } catch (err) {
       console.error(err);
@@ -284,7 +286,7 @@ export default function DashboardPage() {
             <Grid size={{ xs: 12, md: 8 }}>
               <Card sx={{ p: 2 }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>
-                  {role === 'TEAM_MEMBER' ? 'My Monthly Learning Hours (Yearly Trend)' : 'Organization Learning Trend'}
+                  {role === 'TEAM_MEMBER' ? 'My Monthly Learning Hours (Yearly Trend)' : 'Department Learning Trend'}
                 </Typography>
                 <Box sx={{ height: 300, width: '100%' }}>
                   <ResponsiveContainer width="100%" height="100%">

@@ -42,13 +42,14 @@ export const authOptions: AuthOptions = {
           designation: user.designation,
           department: user.department,
           role: user.role,
-          managerId: user.managerId
+          managerId: user.managerId,
+          useLocalLLM: user.useLocalLLM
         };
       }
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+      async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.employeeId = user.employeeId;
@@ -56,6 +57,10 @@ export const authOptions: AuthOptions = {
         token.department = user.department;
         token.role = user.role;
         token.managerId = user.managerId;
+        token.useLocalLLM = (user as any).useLocalLLM;
+      }
+      if (trigger === 'update' && session && session.useLocalLLM !== undefined) {
+        token.useLocalLLM = session.useLocalLLM;
       }
       return token;
     },
@@ -67,6 +72,7 @@ export const authOptions: AuthOptions = {
         session.user.department = token.department as string;
         session.user.role = token.role as Role;
         session.user.managerId = token.managerId as string | null;
+        (session.user as any).useLocalLLM = token.useLocalLLM as boolean;
       }
       return session;
     }

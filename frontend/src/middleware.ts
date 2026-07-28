@@ -19,8 +19,8 @@ export default withAuth(
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
-    // 2. Organization structure & User management: only managers and tower heads
-    if (path.startsWith('/organization') && userRole === 'TEAM_MEMBER') {
+    // 2. Department structure & User management: only managers and tower heads
+    if (path.startsWith('/department') && userRole === 'TEAM_MEMBER') {
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
@@ -49,7 +49,7 @@ export const config = {
     '/analytics/:path*',
     '/reports/:path*',
     '/udemy/:path*',
-    '/organization/:path*',
+    '/department/:path*',
     // Match root dashboard redirect
     '/'
   ]

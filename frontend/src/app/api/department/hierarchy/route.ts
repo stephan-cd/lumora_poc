@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const user = await getApiSession();
     if (!user) return apiUnauthorized();
 
-    const hierarchy = await UserService.getOrganizationHierarchy(user.id);
+    const hierarchy = await UserService.getDepartmentHierarchy(user.id);
     return NextResponse.json(hierarchy);
   } catch (error) {
     return apiServerError(error);

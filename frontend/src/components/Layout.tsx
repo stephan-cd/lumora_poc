@@ -247,26 +247,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <ListItem disablePadding sx={{ mb: 0.5 }}>
             <ListItemButton
               component={Link}
-              href="/organization"
+              href="/department"
               sx={{
                 borderRadius: '10px',
-                backgroundColor: pathname === '/organization'
-                  ? 'rgba(255, 255, 255, 0.15)'
+                backgroundColor: pathname === '/department'
+                  ? 'rgba(255, 255, 255, 0.1)'
                   : 'transparent',
-                color: pathname === '/organization' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                color: pathname === '/department' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
                 '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
                   color: '#ffffff'
                 }
               }}
             >
-              <ListItemIcon sx={{ color: pathname === '/organization' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)', minWidth: 40 }}>
+              <ListItemIcon sx={{ color: pathname === '/department' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)', minWidth: 40 }}>
                 <PeopleIcon />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <Typography sx={{ fontSize: '0.9rem', fontWeight: pathname === '/organization' ? 600 : 500, fontFamily: 'var(--font-poppins)' }}>
-                    Organization
+                  <Typography sx={{ fontSize: '0.9rem', fontWeight: pathname === '/department' ? 600 : 500, fontFamily: 'var(--font-poppins)' }}>
+                    Department
                   </Typography>
                 }
               />
@@ -474,7 +474,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {pathname === '/analytics' && 'Upskilling Analytics'}
             {pathname === '/reports' && 'Reports Generator'}
             {pathname?.startsWith('/udemy') && 'Udemy Business Sync'}
-            {pathname === '/organization' && 'Organization Tree & Members'}
+            {pathname === '/department' && 'Department Tree & Members'}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

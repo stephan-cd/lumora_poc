@@ -54,7 +54,7 @@ import CustomTabPanel from '@/components/atoms/CustomTabPanel';
 import StatusChip from '@/components/atoms/StatusChip';
 import EmptyState from '@/components/organisms/EmptyState';
 
-export default function OrganizationPage() {
+export default function DepartmentPage() {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const user = session?.user;
@@ -78,14 +78,14 @@ export default function OrganizationPage() {
   // Queries
   const { data: usersResponse, isLoading: usersLoading } = useQuery({
     queryKey: ['orgUsers'],
-    queryFn: () => fetch('/api/organization/users').then(res => res.json())
+    queryFn: () => fetch('/api/department/users').then(res => res.json())
   });
 
   const users = Array.isArray(usersResponse) ? usersResponse : [];
 
   const { data: hierarchy, isLoading: treeLoading } = useQuery({
     queryKey: ['orgHierarchy'],
-    queryFn: () => fetch('/api/organization/hierarchy').then(res => res.json())
+    queryFn: () => fetch('/api/department/hierarchy').then(res => res.json())
   });
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -293,7 +293,7 @@ export default function OrganizationPage() {
         <CustomTabPanel value={activeTab} index={1}>
           <Card sx={{ p: 4 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 3 }}>
-              Organizational Reporting Chain
+              Department Reporting Chain
             </Typography>
             {treeLoading ? (
               <Box sx={{ display: 'flex', py: 8, justifyContent: 'center' }}><CircularProgress /></Box>

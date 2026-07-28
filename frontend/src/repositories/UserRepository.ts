@@ -113,7 +113,7 @@ export class UserRepository {
     });
   }
 
-  static async getOrganizationHierarchy() {
+  static async getDepartmentHierarchy() {
     // Fetch all active users with their managers to construct a tree on the server/client
     return prisma.user.findMany({
       where: { status: UserStatus.ACTIVE },

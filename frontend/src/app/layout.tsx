@@ -19,7 +19,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Lumora - Enterprise Skill & Learning Tracker',
-  description: 'Enterprise skill repository, upskilling matrix, learning hours log, and manager approval dashboard for tracking organizational capabilities.',
+  description: 'Enterprise skill repository, upskilling matrix, learning hours log, and manager approval dashboard for tracking departmental capabilities.',
 };
 
 export default function RootLayout({

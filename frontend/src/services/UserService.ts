@@ -215,11 +215,11 @@ export class UserService {
     return UserRepository.listAll();
   }
 
-  static async getOrganizationHierarchy(actorUserId: string) {
+  static async getDepartmentHierarchy(actorUserId: string) {
     const actor = await UserRepository.findById(actorUserId);
     if (!actor) throw new Error('User not found.');
 
-    const rawUsers = await UserRepository.getOrganizationHierarchy();
+    const rawUsers = await UserRepository.getDepartmentHierarchy();
 
     if (actor.role === Role.TRAINING_DEPT) {
       return this.buildHierarchyTree(rawUsers, null);
