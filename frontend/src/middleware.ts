@@ -24,10 +24,7 @@ export default withAuth(
       return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
-    // 3. Udemy Settings sync configuration can only be managed by Tower Heads
-    if (path.startsWith('/udemy/settings') && userRole !== 'TOWER_HEAD') {
-      return NextResponse.redirect(new URL('/udemy/dashboard', req.url));
-    }
+
 
     return NextResponse.next();
   },
@@ -48,7 +45,6 @@ export const config = {
     '/talent-discovery/:path*',
     '/analytics/:path*',
     '/reports/:path*',
-    '/udemy/:path*',
     '/department/:path*',
     // Match root dashboard redirect
     '/'

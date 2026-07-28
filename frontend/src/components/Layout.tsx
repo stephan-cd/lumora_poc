@@ -38,7 +38,6 @@ import {
   Search as SearchIcon,
   BarChart as AnalyticsIcon,
   Assessment as ReportsIcon,
-  School as UdemyIcon,
   Notifications as BellIcon,
   People as PeopleIcon,
   Settings as SettingsIcon,
@@ -63,7 +62,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { mode, toggleTheme } = useAppTheme();
 
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [udemyOpen, setUdemyOpen] = useState(false);
   const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(null);
   const [notiAnchorEl, setNotiAnchorEl] = useState<null | HTMLElement>(null);
   const [notifications, setNotifications] = useState<any[]>([]); // We can fetch this from API
@@ -71,12 +69,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const user = session?.user;
   const userRole = user?.role as string | undefined;
 
-  React.useEffect(() => {
-    // Check if we are inside a Udemy subpath to keep the menu expanded
-    if (pathname?.startsWith('/udemy')) {
-      setUdemyOpen(true);
-    }
-  }, [pathname]);
+
 
   // Fetch notifications helper
   React.useEffect(() => {
@@ -276,145 +269,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <Divider sx={{ my: 1.5, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
 
-        {/* Udemy Business Module (Submenu) */}
-        {userRole !== 'TEAM_MEMBER' && (
-          <ListItem disablePadding sx={{ flexDirection: 'column', alignItems: 'stretch' }}>
-            <ListItemButton
-              onClick={() => setUdemyOpen(!udemyOpen)}
-              sx={{
-                borderRadius: '10px',
-                color: pathname?.startsWith('/udemy') ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                mb: 0.5,
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  color: '#ffffff'
-                }
-              }}
-            >
-              <ListItemIcon sx={{ color: pathname?.startsWith('/udemy') ? '#ffffff' : 'rgba(255, 255, 255, 0.7)', minWidth: 40 }}>
-                <UdemyIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography sx={{ fontSize: '0.9rem', fontWeight: pathname?.startsWith('/udemy') ? 600 : 500, fontFamily: 'var(--font-poppins)' }}>
-                    Udemy Business
-                  </Typography>
-                }
-              />
-              {udemyOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
 
-            <Collapse in={udemyOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding sx={{ pl: 4 }}>
-                <ListItemButton
-                  component={Link}
-                  href="/udemy/dashboard"
-                  sx={{
-                    borderRadius: '8px',
-                    mb: 0.5,
-                    py: 0.5,
-                    backgroundColor: pathname === '/udemy/dashboard' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                    color: pathname === '/udemy/dashboard' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: '#ffffff'
-                    }
-                  }}
-                >
-                  <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Dashboard</Typography>} />
-                </ListItemButton>
-                <ListItemButton
-                  component={Link}
-                  href="/udemy/courses"
-                  sx={{
-                    borderRadius: '8px',
-                    mb: 0.5,
-                    py: 0.5,
-                    backgroundColor: pathname === '/udemy/courses' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                    color: pathname === '/udemy/courses' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: '#ffffff'
-                    }
-                  }}
-                >
-                  <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Courses</Typography>} />
-                </ListItemButton>
-                <ListItemButton
-                  component={Link}
-                  href="/udemy/progress"
-                  sx={{
-                    borderRadius: '8px',
-                    mb: 0.5,
-                    py: 0.5,
-                    backgroundColor: pathname === '/udemy/progress' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                    color: pathname === '/udemy/progress' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: '#ffffff'
-                    }
-                  }}
-                >
-                  <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Progress</Typography>} />
-                </ListItemButton>
-                <ListItemButton
-                  component={Link}
-                  href="/udemy/certifications"
-                  sx={{
-                    borderRadius: '8px',
-                    mb: 0.5,
-                    py: 0.5,
-                    backgroundColor: pathname === '/udemy/certifications' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                    color: pathname === '/udemy/certifications' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: '#ffffff'
-                    }
-                  }}
-                >
-                  <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Certifications</Typography>} />
-                </ListItemButton>
-                <ListItemButton
-                  component={Link}
-                  href="/udemy/sync-logs"
-                  sx={{
-                    borderRadius: '8px',
-                    mb: 0.5,
-                    py: 0.5,
-                    backgroundColor: pathname === '/udemy/sync-logs' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                    color: pathname === '/udemy/sync-logs' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: '#ffffff'
-                    }
-                  }}
-                >
-                  <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Sync Logs</Typography>} />
-                </ListItemButton>
-
-                {userRole === 'TOWER_HEAD' && (
-                  <ListItemButton
-                    component={Link}
-                    href="/udemy/settings"
-                    sx={{
-                      borderRadius: '8px',
-                      mb: 0.5,
-                      py: 0.5,
-                      backgroundColor: pathname === '/udemy/settings' ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                      color: pathname === '/udemy/settings' ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        color: '#ffffff'
-                      }
-                    }}
-                  >
-                    <ListItemText primary={<Typography sx={{ fontSize: '0.85rem', fontFamily: 'var(--font-poppins)' }}>Settings</Typography>} />
-                  </ListItemButton>
-                )}
-              </List>
-            </Collapse>
-          </ListItem>
-        )}
       </List>
 
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
@@ -473,7 +328,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {pathname === '/talent-discovery' && 'Talent Discovery Search'}
             {pathname === '/analytics' && 'Upskilling Analytics'}
             {pathname === '/reports' && 'Reports Generator'}
-            {pathname?.startsWith('/udemy') && 'Udemy Business Sync'}
             {pathname === '/department' && 'Department Tree & Members'}
           </Typography>
 

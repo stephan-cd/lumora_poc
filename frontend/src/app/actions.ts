@@ -5,7 +5,6 @@ import { authOptions } from '@/lib/authOptions';
 import { UserService } from '@/services/UserService';
 import { LearningService } from '@/services/LearningService';
 import { SkillService } from '@/services/SkillService';
-import { UdemyService } from '@/services/UdemyService';
 import { Role, UserStatus, LearningType, LearningSource, ProficiencyLevel, GoalType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
@@ -195,29 +194,7 @@ export async function assessProficiencyAction(employeeId: string, skillId: strin
   return { success: true, proficiency: result };
 }
 
-// --- UDEMY BUSINESS ACTIONS ---
-export async function updateUdemyConfigAction(data: {
-  clientId: string;
-  clientSecret: string;
-  orgId: string;
-  syncFrequency: string;
-}) {
-  await requireAuth(); // verifies authentication
-  const result = await UdemyService.updateConfig(data);
-  revalidatePath('/udemy/settings');
-  return { success: true, config: result };
-}
 
-export async function runUdemySyncAction() {
-  const user = await requireAuth();
-  const result = await UdemyService.runManualSync(user.id);
-  revalidatePath('/udemy/dashboard');
-  revalidatePath('/udemy/courses');
-  revalidatePath('/udemy/progress');
-  revalidatePath('/udemy/certifications');
-  revalidatePath('/udemy/sync-logs');
-  return result;
-}
 
 export async function addAdminSkillAction(data: {
   name: string;

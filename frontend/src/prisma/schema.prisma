@@ -41,7 +41,6 @@ enum LearningType {
 enum LearningSource {
   MANUAL
   INTERNAL_LMS
-  UDEMY
   COURSERA
   OTHER
 }
@@ -59,11 +58,7 @@ enum GoalType {
   YEARLY
 }
 
-enum UdemySyncStatus {
-  SUCCESS
-  FAILED
-  RUNNING
-}
+
 
 model User {
   id               String       @id @default(uuid())
@@ -91,8 +86,6 @@ model User {
   goals            LearningGoal[]
   notifications    Notification[]
   auditLogs        AuditLog[]
-  udemyProgress    UdemyProgress[]
-  udemyCertifications UdemyCertification[]
   commits             Commit[]
   profileReport       UserProfileReport?
 
@@ -112,7 +105,6 @@ model Skill {
   learningEntries  LearningEntry[]
   proficiencies    SkillProficiency[]
   requests         SkillRequest[]
-  udemyCourses     UdemyCourse[]
 
   @@index([category])
 }
@@ -219,68 +211,7 @@ model AuditLog {
   @@index([action])
 }
 
-model UdemyConfig {
-  id               String          @id @default(uuid())
-  clientId         String
-  clientSecret     String
-  orgId            String
-  syncFrequency    String          @default("daily") // daily, weekly, custom
-  syncSchedule     String?         // cron pattern
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-}
 
-model UdemyCourse {
-  id               String          @id @default(uuid())
-  courseId         Int             @unique // External course ID
-  title            String
-  instructor       String
-  duration         Float           // in hours
-  category         String
-  rating           Float           @default(0.0)
-  language         String          @default("English")
-  url              String?
-  createdAt        DateTime        @default(now())
-  skillId          String?
-  skill            Skill?          @relation(fields: [skillId], references: [id])
-
-  progress         UdemyProgress[]
-  certifications   UdemyCertification[]
-}
-
-model UdemyProgress {
-  id               String          @id @default(uuid())
-  userId           String
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId         String
-  course           UdemyCourse     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  progressPercent  Float           @default(0.0)
-  timeSpent        Float           @default(0.0) // in hours
-  lastAccessDate   DateTime?
-  updatedAt        DateTime        @updatedAt
-
-  @@unique([userId, courseId])
-}
-
-model UdemyCertification {
-  id               String          @id @default(uuid())
-  certificateName  String
-  userId           String
-  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  courseId         String
-  course           UdemyCourse     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  completionDate   DateTime
-
-  @@unique([userId, courseId])
-}
-
-model UdemySyncLog {
-  id               String          @id @default(uuid())
-  syncTime         DateTime        @default(now())
-  status           UdemySyncStatus
-  recordsImported  Int             @default(0)
-  errorLogs        String?
-}
 
 model Repository {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

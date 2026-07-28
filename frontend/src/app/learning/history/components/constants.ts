@@ -16,7 +16,7 @@ export const logSchema = z.object({
 export type LogForm = z.infer<typeof logSchema>;
 
 export const TYPES = ['COURSE', 'CERTIFICATION', 'WORKSHOP', 'INTERNAL_TRAINING', 'YOUTUBE', 'BOOK_READING', 'RESEARCH', 'CONFERENCE', 'SELF_LEARNING', 'OTHER'];
-export const SOURCES = ['MANUAL', 'INTERNAL_LMS', 'UDEMY', 'COURSERA', 'OTHER'];
+export const SOURCES = ['MANUAL', 'INTERNAL_LMS', 'COURSERA', 'OTHER'];
 
 export const statusColor = (s: string) =>
   s === 'APPROVED' ? 'success' : s === 'REJECTED' ? 'error' : 'warning';

@@ -14,7 +14,7 @@ CREATE TYPE "ApprovalStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 CREATE TYPE "LearningType" AS ENUM ('COURSE', 'CERTIFICATION', 'WORKSHOP', 'INTERNAL_TRAINING', 'YOUTUBE', 'BOOK_READING', 'RESEARCH', 'CONFERENCE', 'SELF_LEARNING', 'OTHER');
 
 -- CreateEnum
-CREATE TYPE "LearningSource" AS ENUM ('MANUAL', 'INTERNAL_LMS', 'UDEMY', 'COURSERA', 'OTHER');
+CREATE TYPE "LearningSource" AS ENUM ('MANUAL', 'INTERNAL_LMS', 'COURSERA', 'OTHER');
 
 -- CreateEnum
 CREATE TYPE "ProficiencyLevel" AS ENUM ('BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT');
@@ -22,8 +22,7 @@ CREATE TYPE "ProficiencyLevel" AS ENUM ('BEGINNER', 'INTERMEDIATE', 'ADVANCED', 
 -- CreateEnum
 CREATE TYPE "GoalType" AS ENUM ('MONTHLY', 'QUARTERLY', 'YEARLY');
 
--- CreateEnum
-CREATE TYPE "UdemySyncStatus" AS ENUM ('SUCCESS', 'FAILED', 'RUNNING');
+
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -146,71 +145,7 @@ CREATE TABLE "AuditLog" (
     CONSTRAINT "AuditLog_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "UdemyConfig" (
-    "id" TEXT NOT NULL,
-    "clientId" TEXT NOT NULL,
-    "clientSecret" TEXT NOT NULL,
-    "orgId" TEXT NOT NULL,
-    "syncFrequency" TEXT NOT NULL DEFAULT 'daily',
-    "syncSchedule" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "UdemyConfig_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UdemyCourse" (
-    "id" TEXT NOT NULL,
-    "courseId" INTEGER NOT NULL,
-    "title" TEXT NOT NULL,
-    "instructor" TEXT NOT NULL,
-    "duration" DOUBLE PRECISION NOT NULL,
-    "category" TEXT NOT NULL,
-    "rating" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
-    "language" TEXT NOT NULL DEFAULT 'English',
-    "url" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "skillId" TEXT,
-
-    CONSTRAINT "UdemyCourse_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UdemyProgress" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "courseId" TEXT NOT NULL,
-    "progressPercent" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
-    "timeSpent" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
-    "lastAccessDate" TIMESTAMP(3),
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "UdemyProgress_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UdemyCertification" (
-    "id" TEXT NOT NULL,
-    "certificateName" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "courseId" TEXT NOT NULL,
-    "completionDate" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "UdemyCertification_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "UdemySyncLog" (
-    "id" TEXT NOT NULL,
-    "syncTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" "UdemySyncStatus" NOT NULL,
-    "recordsImported" INTEGER NOT NULL DEFAULT 0,
-    "errorLogs" TEXT,
-
-    CONSTRAINT "UdemySyncLog_pkey" PRIMARY KEY ("id")
-);
 
 -- CreateTable
 CREATE TABLE "repositories" (
@@ -347,14 +282,7 @@ CREATE INDEX "AuditLog_userId_idx" ON "AuditLog"("userId");
 -- CreateIndex
 CREATE INDEX "AuditLog_action_idx" ON "AuditLog"("action");
 
--- CreateIndex
-CREATE UNIQUE INDEX "UdemyCourse_courseId_key" ON "UdemyCourse"("courseId");
 
--- CreateIndex
-CREATE UNIQUE INDEX "UdemyProgress_userId_courseId_key" ON "UdemyProgress"("userId", "courseId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UdemyCertification_userId_courseId_key" ON "UdemyCertification"("userId", "courseId");
 
 -- CreateIndex
 CREATE INDEX "commits_commit_hash_idx" ON "commits"("commit_hash");
@@ -401,20 +329,7 @@ ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY
 -- AddForeignKey
 ALTER TABLE "AuditLog" ADD CONSTRAINT "AuditLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
--- AddForeignKey
-ALTER TABLE "UdemyCourse" ADD CONSTRAINT "UdemyCourse_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "Skill"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
--- AddForeignKey
-ALTER TABLE "UdemyProgress" ADD CONSTRAINT "UdemyProgress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UdemyProgress" ADD CONSTRAINT "UdemyProgress_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "UdemyCourse"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UdemyCertification" ADD CONSTRAINT "UdemyCertification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UdemyCertification" ADD CONSTRAINT "UdemyCertification_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "UdemyCourse"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "commits" ADD CONSTRAINT "commits_repository_id_fkey" FOREIGN KEY ("repository_id") REFERENCES "repositories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
