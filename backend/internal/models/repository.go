@@ -30,4 +30,5 @@ type Commit struct {
 	UserID       *string   `gorm:"index" json:"user_id"`
 
 	Repository Repository `gorm:"foreignKey:RepositoryID" json:"repository"`
+	User       *User      `gorm:"foreignKey:UserID" json:"user"`
 }

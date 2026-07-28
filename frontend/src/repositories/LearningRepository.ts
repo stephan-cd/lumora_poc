@@ -220,6 +220,7 @@ export class LearningRepository {
     skillId?: string;
     skillNameQuery?: string;
     minHours?: number;
+    minCodeQuality?: number;
     proficiencyLevel?: ProficiencyLevel;
   }) {
     const where: any = {
@@ -319,6 +320,11 @@ export class LearningRepository {
     // Apply minimum hours filter
     if (filters.minHours !== undefined) {
       results = results.filter(r => r.hours >= filters.minHours!);
+    }
+
+    // Apply minimum code quality filter
+    if (filters.minCodeQuality !== undefined) {
+      results = results.filter(r => r.avgCodeQuality !== null && r.avgCodeQuality >= filters.minCodeQuality!);
     }
 
     // Apply proficiency level filter

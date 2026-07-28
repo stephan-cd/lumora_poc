@@ -12,15 +12,18 @@ export async function GET(req: NextRequest) {
     const skillId = searchParams.get('skillId') || undefined;
     const skillQuery = searchParams.get('skillQuery') || undefined;
     const minHoursStr = searchParams.get('minHours');
+    const minCodeQualityStr = searchParams.get('minCodeQuality');
     const levelStr = searchParams.get('level');
 
     const minHours = minHoursStr ? parseFloat(minHoursStr) : undefined;
+    const minCodeQuality = minCodeQualityStr ? parseFloat(minCodeQualityStr) : undefined;
     const level = levelStr ? levelStr as ProficiencyLevel : undefined;
 
     const talent = await LearningService.discoverTalent({
       skillId,
       skillNameQuery: skillQuery,
       minHours,
+      minCodeQuality,
       proficiencyLevel: level
     });
 

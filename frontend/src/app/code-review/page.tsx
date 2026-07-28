@@ -35,6 +35,7 @@ const fetchReviews = async () => {
     id: review.id,
     repo: review.commit?.repository?.name || 'Unknown Repo',
     commit: review.commit?.commit_hash ? review.commit.commit_hash.substring(0, 7) : 'unknown',
+    author: review.commit?.user?.name || review.commit?.author || 'Unknown',
     status: review.status,
     score: review.score,
     issues: review.issues ? review.issues.length : 0,
@@ -71,6 +72,7 @@ export default function CodeReviewDashboard() {
             <Table>
               <TableHead sx={{ bgcolor: 'rgba(0, 0, 0, 0.02)' }}>
                 <TableRow>
+                  <TableCell sx={{ fontWeight: 600 }}>Author</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Repository</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Commit</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
@@ -81,6 +83,7 @@ export default function CodeReviewDashboard() {
               <TableBody>
                 {reviews?.map((review: any) => (
                   <TableRow key={review.id} hover>
+                    <TableCell sx={{ fontWeight: 500 }}>{review.author}</TableCell>
                     <TableCell sx={{ fontWeight: 500 }}>{review.repo}</TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, fontFamily: 'monospace', color: 'text.secondary' }}>

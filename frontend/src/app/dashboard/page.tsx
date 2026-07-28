@@ -42,7 +42,8 @@ import {
   ThumbUpAlt as ApprovedIcon,
   ErrorOutlined as PendingIcon,
   Star as StarIcon,
-  WorkspacePremium as CertificateIcon
+  WorkspacePremium as CertificateIcon,
+  RateReview as ReviewIcon
 } from '@mui/icons-material';
 
 import {
@@ -241,10 +242,10 @@ export default function DashboardPage() {
                   <MetricCard title="Unique Skills" value={widgets.skillCoverage || 0} icon={<StarIcon />} iconBgColor="text.secondary" />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                  <MetricCard title="Total Skills" value={widgets.totalSkills || 0} icon={<ApprovedIcon />} iconBgColor="info.main" />
+                  <MetricCard title="Pending Approvals" value={widgets.pendingApprovals || 0} icon={<PendingIcon />} iconBgColor="warning.main" />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                  <MetricCard title="Pending Approvals" value={widgets.pendingApprovals || 0} icon={<PendingIcon />} iconBgColor="warning.main" />
+                  <MetricCard title="Avg Review Score" value={`${widgets.averageCodeReviewScore || 0}/100`} icon={<ReviewIcon />} iconBgColor="secondary.main" />
                 </Grid>
               </>
             )}

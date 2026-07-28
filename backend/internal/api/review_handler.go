@@ -10,7 +10,7 @@ import (
 
 func GetReviews(c *gin.Context) {
 	var reviews []models.Review
-	if err := db.DB.Preload("Commit.Repository").Preload("Commit").Preload("Issues").Order("created_at desc").Find(&reviews).Error; err != nil {
+	if err := db.DB.Preload("Commit.Repository").Preload("Commit.User").Preload("Commit").Preload("Issues").Order("created_at desc").Find(&reviews).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -20,7 +20,7 @@ func GetReviews(c *gin.Context) {
 func GetReviewByID(c *gin.Context) {
 	id := c.Param("id")
 	var review models.Review
-	if err := db.DB.Preload("Commit.Repository").Preload("Commit").Preload("Issues").First(&review, "id = ?", id).Error; err != nil {
+	if err := db.DB.Preload("Commit.Repository").Preload("Commit.User").Preload("Commit").Preload("Issues").First(&review, "id = ?", id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Review not found"})
 		return
 	}

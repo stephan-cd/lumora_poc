@@ -37,6 +37,7 @@ import {
 export default function TalentDiscoveryPage() {
   const [skillSearch, setSkillSearch] = useState('');
   const [minHours, setMinHours] = useState<number>(0);
+  const [minCodeQuality, setMinCodeQuality] = useState<number>(0);
   const [sortBy, setSortBy] = useState('hours'); // hours, recent
 
   // Queries
@@ -46,11 +47,12 @@ export default function TalentDiscoveryPage() {
   });
 
   const { data: results, isLoading, refetch } = useQuery({
-    queryKey: ['talentSearch', skillSearch, minHours, sortBy],
+    queryKey: ['talentSearch', skillSearch, minHours, minCodeQuality, sortBy],
     queryFn: () => {
       const params = new URLSearchParams();
       if (skillSearch) params.append('skillQuery', skillSearch);
       if (minHours > 0) params.append('minHours', minHours.toString());
+      if (minCodeQuality > 0) params.append('minCodeQuality', minCodeQuality.toString());
       return fetch(`/api/learning/talent?${params.toString()}`).then(res => res.json());
     }
   });
@@ -58,6 +60,7 @@ export default function TalentDiscoveryPage() {
   const handleClearFilters = () => {
     setSkillSearch('');
     setMinHours(0);
+    setMinCodeQuality(0);
     setSortBy('hours');
   };
 
@@ -122,6 +125,20 @@ export default function TalentDiscoveryPage() {
                 <Slider
                   value={minHours}
                   onChange={(e, val) => setMinHours(val as number)}
+                  min={0}
+                  max={100}
+                  step={5}
+                  valueLabelDisplay="auto"
+                />
+              </Box>
+
+              <Box sx={{ mt: 3, mb: 1 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Minimum Code Quality Score: <strong>{minCodeQuality}</strong>
+                </Typography>
+                <Slider
+                  value={minCodeQuality}
+                  onChange={(e, val) => setMinCodeQuality(val as number)}
                   min={0}
                   max={100}
                   step={5}

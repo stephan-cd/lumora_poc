@@ -306,6 +306,7 @@ export class LearningService {
     skillId?: string;
     skillNameQuery?: string;
     minHours?: number;
+    minCodeQuality?: number;
     proficiencyLevel?: ProficiencyLevel;
   }) {
     return LearningRepository.discoverTalent(filters);

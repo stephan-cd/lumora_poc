@@ -277,13 +277,35 @@ export class AnalyticsService {
       return { category, department: groupVal, hours: parseFloat(hours.toFixed(1)) };
     });
 
+    // Fetch users in scope for Code Review metrics
+    const userWhere: any = {};
+    if (actor.role === Role.TOWER_HEAD) {
+      userWhere.department = actor.department;
+    }
+    const usersInScope = await prisma.user.findMany({ where: userWhere, select: { id: true } });
+    const userIds = usersInScope.map(u => u.id);
+
+    const reviews = await prisma.review.findMany({
+      where: {
+        commit: {
+          user_id: { in: userIds }
+        }
+      },
+      select: { score: true }
+    });
+
+    const averageCodeReviewScore = reviews.length > 0
+      ? Math.round(reviews.reduce((sum, r) => sum + r.score, 0) / reviews.length)
+      : 0;
+
     return {
       widgets: {
         orgLearningHours,
         activeLearners,
         skillCoverage,
         totalSkills,
-        pendingApprovals
+        pendingApprovals,
+        averageCodeReviewScore
       },
       charts: {
         learningTrend,
