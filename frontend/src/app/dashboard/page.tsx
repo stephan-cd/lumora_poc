@@ -247,7 +247,7 @@ export default function DashboardPage() {
                   <MetricCard title="Pending Approvals" value={widgets.pendingApprovals || 0} icon={<PendingIcon />} iconBgColor="warning.main" />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
-                  <MetricCard title="Avg Review Score" value={`${widgets.averageCodeReviewScore || 0}/100`} icon={<ReviewIcon />} iconBgColor="secondary.main" />
+                  <MetricCard title="Avg Review Score" value={`${widgets.averageCodeReviewScore || 0}/100`} icon={<ReviewIcon />} iconBgColor="info.main" />
                 </Grid>
               </>
             )}

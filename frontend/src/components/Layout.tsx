@@ -140,7 +140,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
     { text: 'Code Review', path: '/code-review', icon: <CodeIcon /> },
     { text: 'Skills Repository', path: '/skills', icon: <SkillsIcon /> },
-    ...(userRole !== 'TRAINING_DEPT' ? [{ text: 'Log Learning Hours', path: '/learning/history', icon: <HistoryIcon /> }] : []),
+    ...(userRole !== 'TRAINING_DEPT' && userRole !== 'TOWER_HEAD' ? [{ text: 'Log Learning Hours', path: '/learning/history', icon: <HistoryIcon /> }] : []),
     { text: 'Skill Matrix', path: '/skill-matrix', icon: <MatrixIcon /> },
     { text: 'Talent Discovery', path: '/talent-discovery', icon: <SearchIcon /> },
     { text: 'Analytics', path: '/analytics', icon: <AnalyticsIcon /> },

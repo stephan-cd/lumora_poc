@@ -40,8 +40,6 @@ export default function SkillMatrixPage() {
   // Filter States
   const [managerFilter, setManagerFilter] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [startDateFilter, setStartDateFilter] = useState('');
-  const [endDateFilter, setEndDateFilter] = useState('');
 
   // Queries
   const { data: managers } = useQuery({
@@ -55,12 +53,10 @@ export default function SkillMatrixPage() {
   });
 
   const { data: matrixData, isLoading } = useQuery({
-    queryKey: ['matrix', managerFilter, startDateFilter, endDateFilter],
+    queryKey: ['matrix', managerFilter],
     queryFn: () => {
       const params = new URLSearchParams();
       if (managerFilter) params.append('managerId', managerFilter);
-      if (startDateFilter) params.append('startDate', startDateFilter);
-      if (endDateFilter) params.append('endDate', endDateFilter);
       return fetch(`/api/learning/matrix?${params.toString()}`).then(res => res.json());
     }
   });
@@ -68,8 +64,6 @@ export default function SkillMatrixPage() {
   const handleClearFilters = () => {
     setManagerFilter('');
     setSelectedSkills([]);
-    setStartDateFilter('');
-    setEndDateFilter('');
   };
 
   const employees = matrixData?.employees || [];
@@ -191,7 +185,7 @@ export default function SkillMatrixPage() {
             <FilterIcon fontSize="small" /> Matrix Filter Controls
           </Typography>
           <Grid container spacing={2} sx={{ alignItems: 'center' }}>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 select
                 fullWidth
@@ -206,7 +200,7 @@ export default function SkillMatrixPage() {
                 ))}
               </TextField>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <FormControl fullWidth>
                 <InputLabel shrink id="skills-filter-label">Compare Skills</InputLabel>
                 <Select
@@ -227,27 +221,7 @@ export default function SkillMatrixPage() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-              <TextField
-                type="date"
-                fullWidth
-                label="Start Date"
-                value={startDateFilter}
-                onChange={(e) => setStartDateFilter(e.target.value)}
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 2 }}>
-              <TextField
-                type="date"
-                fullWidth
-                label="End Date"
-                value={endDateFilter}
-                onChange={(e) => setEndDateFilter(e.target.value)}
-                slotProps={{ inputLabel: { shrink: true } }}
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 12, md: 2 }} sx={{ textAlign: 'right' }}>
+            <Grid size={{ xs: 12, sm: 12, md: 4 }} sx={{ display: 'flex', alignItems: 'center' }}>
               <Button variant="text" color="inherit" onClick={handleClearFilters}>
                 Clear Filters
               </Button>
