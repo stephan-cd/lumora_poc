@@ -12,7 +12,8 @@ import {
   MenuItem,
   Alert,
   Grid,
-  InputAdornment
+  InputAdornment,
+  Autocomplete
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { useForm, useWatch, Controller } from 'react-hook-form';
@@ -93,25 +94,32 @@ export default function LogDialog({ open, editingLog, skills, submitError, onClo
             <Controller
               name="skillId"
               control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  select
-                  fullWidth
-                  size="small"
-                  placeholder="Select a skill"
-                  error={!!errors.skillId}
-                  helperText={errors.skillId?.message}
-                >
-                  {!skills ? (
-                    <MenuItem value="" disabled>Loading…</MenuItem>
-                  ) : (
-                    skills.map((s: any) => (
-                      <MenuItem key={s.id} value={s.id}>{s.name} — {s.category}</MenuItem>
-                    ))
-                  )}
-                </TextField>
-              )}
+              render={({ field: { onChange, value }, fieldState: { error } }) => {
+                const selectedSkill = skills?.find((s: any) => s.id === value) || null;
+                return (
+                  <Autocomplete
+                    options={skills || []}
+                    getOptionLabel={(option: any) => `${option.name} — ${option.category}`}
+                    value={selectedSkill}
+                    onChange={(_, newValue) => {
+                      onChange(newValue ? newValue.id : '');
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        size="small"
+                        placeholder={skills ? "Search and select a skill" : "Loading..."}
+                        error={!!error}
+                        helperText={error?.message}
+                      />
+                    )}
+                    loading={!skills}
+                    noOptionsText="No skills found"
+                    disableClearable={false}
+                  />
+                );
+              }}
             />
           </Box>
 

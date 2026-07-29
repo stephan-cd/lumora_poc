@@ -28,6 +28,7 @@ type Commit struct {
 	Message      string    `json:"message"`
 	CreatedAt    time.Time `json:"created_at"`
 	UserID       *string   `gorm:"index" json:"user_id"`
+	Technology   string    `json:"technology"`
 
 	Repository Repository `gorm:"foreignKey:RepositoryID" json:"repository"`
 	User       *User      `gorm:"foreignKey:UserID" json:"user"`

@@ -67,6 +67,7 @@ func ProcessCommit(repositoryFullName, commitHash, author string) {
 	// 3. Detect Technology (simplified)
 	technology := detectTechnology(cleanDiff)
 	log.Printf("Detected technology: %s", technology)
+	db.DB.Model(&commit).Update("technology", technology)
 
 	// 4. RAG Retrieval (Qdrant call)
 	rules, err := rag.RetrieveRules(context.Background(), cleanDiff, technology, 5)

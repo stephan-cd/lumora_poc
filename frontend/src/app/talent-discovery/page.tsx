@@ -24,12 +24,16 @@ import {
 } from '@mui/material';
 
 import {
-  Search as SearchIcon
+  Search as SearchIcon,
+  AutoAwesome as AutoAwesomeIcon
 } from '@mui/icons-material';
+
+import JDMatchModal from './JDMatchModal';
 
 export default function TalentDiscoveryPage() {
   const [teamId, setTeamId] = useState('');
   const [searchEmployee, setSearchEmployee] = useState('');
+  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
   // Queries
   const { data: teams } = useQuery({
@@ -109,6 +113,14 @@ export default function TalentDiscoveryPage() {
               <Button variant="contained" onClick={() => refetch()}>
                 Search
               </Button>
+              <Button 
+                variant="contained" 
+                color="secondary" 
+                startIcon={<AutoAwesomeIcon />} 
+                onClick={() => setIsMatchModalOpen(true)}
+              >
+                Match JD
+              </Button>
             </Box>
           </Box>
         </Card>
@@ -177,6 +189,7 @@ export default function TalentDiscoveryPage() {
                           variant="outlined" 
                           size="small" 
                           href={`/talent-discovery/${row.userId}`}
+                          startIcon={<AutoAwesomeIcon />}
                         >
                           AI Profile
                         </Button>
@@ -189,6 +202,12 @@ export default function TalentDiscoveryPage() {
           )}
         </Card>
       </Box>
+
+      <JDMatchModal 
+        open={isMatchModalOpen} 
+        onClose={() => setIsMatchModalOpen(false)} 
+        teamId={teamId}
+      />
     </Layout>
   );
 }

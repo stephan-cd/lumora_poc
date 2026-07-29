@@ -42,6 +42,7 @@ enum LearningSource {
   MANUAL
   INTERNAL_LMS
   COURSERA
+  UDEMY
   OTHER
 }
 
@@ -240,6 +241,7 @@ model Commit {
   created_at    DateTime
   user_id       String?    // Link to User table
   user          User?      @relation(fields: [user_id], references: [id])
+  technology    String?
 
   reviews       Review[]
 
